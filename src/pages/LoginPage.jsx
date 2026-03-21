@@ -1,8 +1,11 @@
 import React, {useState} from "react";
+import { useNavigate } from "react-router-dom";
+import InputForm from "../components/InputForm.jsx";
+import Header from "../components/Header.jsx";
 import "../css/LoginPage.css";
-import logo from "../assets/logo.jpeg";
 
 export default function LoginPage() {
+    const navigate = useNavigate();
     const [form, setForm] = useState({
         email: "",
         password: "",
@@ -24,8 +27,7 @@ export default function LoginPage() {
     };
 
     const handleSignup = () => {
-        //회원가입 페이지로 이동
-        console.log("회원가입 페이지로 이동");
+        navigate("/signup");
     };
 
     const handleFindPassword = () => {
@@ -36,66 +38,55 @@ export default function LoginPage() {
     return (
         <div className="login-page">
             <div className="login-container">
-                <header className="login-header">
-                    <div className="logo-box">
-                        <img src={logo} alt="로고" className="logo-image"  />
-                    </div>
-                    <div className="header-line"></div>
-                </header>
+                <Header />
 
                 <main className="login-content">
                     <h1 className="login-title">로그인</h1>
                     <form className="login-form" onSubmit={handleLogin}>
-                        
+                        <InputForm
+                            label="이메일"
+                            id="email"
+                            name="email"
+                            type="email"
+                            placeholder="ex) duksae@gmail.com"
+                            value={form.email}
+                            onChange={handleChange}
+                        />
 
-                        <div className="form-group">
-                            <label htmlFor="email">이메일</label>
-                                <input
-                                    id="email"
-                                    name="email"
-                                    type="email"
-                                    placeholder="ex) duksae@gmail.com"
-                                    value={form.email}
-                                    onChange={handleChange}
-                                />
-                            </div>
+                        <InputForm
+                            label="비밀번호"
+                            id="password"
+                            name="password"
+                            type="password"
+                            placeholder="비밀번호를 입력하세요"
+                            value={form.password}
+                            onChange={handleChange}
+                        />
 
-                            <div className="form-group">
-                                <label htmlFor="password">비밀번호</label>
-                                    <input
-                                        id="password"
-                                        name="password"
-                                        type="password"
-                                        value={form.password}
-                                        onChange={handleChange}
-                                    />
-                                </div>
-
-                                <div className="find-password-wrap">
-                                    <button
-                                        type="button"
-                                        className="find-password-btn"
-                                        onClick={handleFindPassword}
-                                    >
-                                        비밀번호 찾기
-                                    </button>
-                                </div>
-
-                                <div className="button-group">
-                                    <button
-                                        type="button"
-                                        className="signup-btn"
-                                        onClick={handleSignup}
-                                    >
-                                        회원가입
-                                    </button>
-                                    <button type="submit" className="login-btn">
-                                        로그인
-                                    </button>
-                                </div>
-                            </form>
-                        </main>
-                    </div>
+                        <div className="find-password-wrap">
+                            <button
+                                type="button"
+                                className="find-password-btn"
+                                onClick={handleFindPassword}
+                            >
+                                비밀번호 찾기
+                            </button>
+                        </div>
+                        <div className="button-group">
+                            <button
+                                type="button"
+                                className="signup-btn"
+                                onClick={handleSignup}
+                            >
+                                회원가입
+                            </button>
+                            <button type="submit" className="login-btn">
+                                로그인
+                            </button>
+                        </div>
+                    </form>
+                </main>
             </div>
+        </div>
     );
 }

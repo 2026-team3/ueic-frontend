@@ -1,0 +1,27 @@
+.sform-group {
+  margin-bottom: 28px;
+}
+
+.sform-group label {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 17px;
+  font-weight: 500;
+  color: #111111;
+  text-align: left;
+}
+
+.sform-group input {
+  width: 50%;
+  height: 56px;
+  padding: 0 16px;
+  border: 2px solid #7ea7ff;
+  border-radius: 4px;
+  outline: none;
+  background-color: #ffffff;
+  font-size: 16px;
+}
+
+.sform-group input::placeholder {
+  color: #b7b7b7;
+}
