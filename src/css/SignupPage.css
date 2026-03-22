@@ -39,6 +39,61 @@
   text-align: left;
 }
 
+.sinput-row{
+  display: flex;
+  gap: 16px;
+}
+.sinput-row > * {
+  flex: 1;
+}
+
+.tag-instruction {
+  margin: 24px 0 16px 0;
+  font-size: 16px;
+  font-weight: 400;
+  color: gray;
+  text-align: left;
+}
+
+.tag-field {
+  margin-bottom: 28px;
+}
+
+.tag-field label {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 17px;
+  font-weight: 500;
+  color: #111111;
+  text-align: left;
+}
+
+
+.tag-control {
+  width: 100%;
+  height: 56px;
+  padding: 0 16px;
+  border-radius: 4px; 
+  outline: none;
+  background-color: #CFEBFF;
+  border: none;
+  font-size: 16px;
+}
+
+.radio-group {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
 .signup-btn {
   flex: 1;
   height: 52px;
@@ -50,16 +105,12 @@
 }
 
 .signup-btn {
-  background-color: #c8dbf2;
-  color: #111111;
-}
-
-.login-btn {
   background-color: #6695f0;
   color: white;
+  width: 50%;
+  margin: 32px 0 64px 0;
 }
 
-.signup-btn:hover,
-.login-btn:hover {
+.signup-btn:hover{
   opacity: 0.92;
 }
