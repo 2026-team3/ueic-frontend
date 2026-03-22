@@ -19,11 +19,37 @@ export default function LoginPage() {
         }));
     };
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
 
-        //나중에 API 연결
-        console.log("로그인 요청:", form);
+        try {
+            const response = await fetch("http://localhost:8080/api/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(form),
+                credentials: "include", // 쿠키 받으려면 필수
+            });
+
+            if (!response.ok) {
+                throw new Error("로그인 실패");
+            }
+
+            const data = await response.json();
+            console.log("로그인 성공:", data);
+            alert("로그인 성공!")
+
+            // 예: accessToken localStorage에 저장
+            localStorage.setItem("accessToken", data.data.accessToken);
+
+            // 로그인 후 페이지 이동
+            navigate("/"); // 메인 페이지로 이동
+
+        } catch (error) {
+            console.error(error);
+            alert("로그인 실패: 이메일/비밀번호를 확인하세요.");
+        }
     };
 
     const handleSignup = () => {
