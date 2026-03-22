@@ -94,7 +94,7 @@
   white-space: nowrap;
 }
 
-.signup-btn {
+.main-signup-btn {
   flex: 1;
   height: 52px;
   border: none;
@@ -104,13 +104,13 @@
   font-weight: 700;
 }
 
-.signup-btn {
+.main-signup-btn {
   background-color: #6695f0;
   color: white;
   width: 50%;
-  margin: 32px 0 64px 0;
+  margin: 0 0 32px 0;
 }
 
-.signup-btn:hover{
+.main-signup-btn:hover{
   opacity: 0.92;
 }
