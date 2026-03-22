@@ -25,51 +25,51 @@ export default function SignupPage() {
     };
 
     const handleSignup = async (e) => {
-        // e.preventDefault();
+        e.preventDefault();
 
-        // const payload = {
-        //     email: form.email,
-        //     password: form.password,
-        //     passwordConfirm: form.confirmPassword,
-        //     name: form.name,
-        //     phoneNumber: form.phoneNumber,
-        //     preferredMode: form.preferredMode,
-        //     availableTimes: form.availableTimes ? [form.availableTimes] : [],
-        //     targetScore: Number(form.targetScore),
-        // };
+        const payload = {
+            email: form.email,
+            password: form.password,
+            passwordConfirm: form.confirmPassword,
+            name: form.name,
+            phoneNumber: form.phoneNumber,
+            preferredMode: form.preferredMode,
+            availableTimes: form.availableTimes ? [form.availableTimes] : [],
+            targetScore: Number(form.targetScore),
+        };
 
-        // try {
-        //     const response = await fetch("/api/auth/signup", {
-        //         method: "POST",
-        //         headers: {
-        //             "Content-Type": "application/json",
-        //         },
-        //         credentials: "include",
-        //         body: JSON.stringify(payload),
-        //     });
+        try {
+            const response = await fetch("/api/auth/signup", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify(payload),
+            });
 
-        //     const result = await response.json();
+            const result = await response.json();
 
-        //     if (!response.ok) {
-        //         console.error("회원가입 실패:", result);
-        //         alert(result.message || "회원가입에 실패했습니다.");
-        //         return;
-        //     }
+            if (!response.ok) {
+                console.error("회원가입 실패:", result);
+                alert(result.message || "회원가입에 실패했습니다.");
+                return;
+            }
 
-        //     console.log("회원가입 성공:", result);
+            console.log("회원가입 성공:", result);
 
-        //     const accessToken = result?.data?.accessToken;
-        //     if (accessToken) {
-        //         localStorage.setItem("accessToken", accessToken);
-        //     }
+            const accessToken = result?.data?.accessToken;
+            if (accessToken) {
+                localStorage.setItem("accessToken", accessToken);
+            }
 
-        //     alert("회원가입이 완료되었습니다.");
-        //     // 예: 홈이나 테스트 페이지로 이동
-        //     // navigate("/test");
-        // } catch (error) {
-        //     console.error("서버 요청 오류:", error);
-        //     alert("서버와 통신 중 오류가 발생했습니다.");
-        // }
+            alert("회원가입이 완료되었습니다.");
+            // 예: 홈이나 테스트 페이지로 이동
+            // navigate("/test");
+        } catch (error) {
+            console.error("서버 요청 오류:", error);
+            alert("서버와 통신 중 오류가 발생했습니다.");
+        }
         console.log("회원가입!")
     };
 
