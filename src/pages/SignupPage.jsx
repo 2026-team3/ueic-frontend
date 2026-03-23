@@ -70,7 +70,7 @@ export default function SignupPage() {
             console.error("서버 요청 오류:", error);
             alert("서버와 통신 중 오류가 발생했습니다.");
         }
-        console.log("회원가입!")
+
     };
 
     return (
