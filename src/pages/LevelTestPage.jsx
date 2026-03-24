@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import "../css/LevelTestPage.css"
+import Header from "../components/Header";
 
 export default function LevelTestPage() {
     const [questions, setQuestions] = useState([]);
@@ -44,20 +46,26 @@ export default function LevelTestPage() {
     if (error) return <div>{error}</div>;
 
     return (
-        <div>
-            <h1>레벨 테스트</h1>
+        <div className="level-test-page">
+            <div className="level-test-container">
+                <Header />
 
-            {questions.map((question, index) => (
-                <div key={question.id}>
-                    <p>{index + 1}. {question.content}</p>
+                <main className="level-test-content">
+                    <h1 className="level-test-title">레벨 테스트</h1>
 
-                    {question.choices?.map((choice) => (
-                        <button key={choice.id} type="button">
-                            {choice.content}
-                        </button>
+                    {questions.map((question, index) => (
+                        <div key={question.id}>
+                            <p>{index + 1}. {question.content}</p>
+
+                            {question.choices?.map((choice) => (
+                                <button key={choice.id} type="button">
+                                    {choice.content}
+                                </button>
+                            ))}
+                        </div>
                     ))}
-                </div>
-            ))}
+                </main>
+            </div>
         </div>
     );
 }
