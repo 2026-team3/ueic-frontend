@@ -44,7 +44,7 @@ export default function LoginPage() {
             localStorage.setItem("accessToken", data.data.accessToken);
 
             // 로그인 후 페이지 이동
-            navigate("/"); // 메인 페이지로 이동
+            navigate("/level-test"); // 메인 페이지로 이동
 
         } catch (error) {
             console.error(error);
