@@ -1,0 +1,87 @@
+.login-page {
+  min-height: 100vh;
+  padding: 12px;
+  background-color: #ffffff;
+}
+
+.login-container {
+  width: 100%;
+  min-height: calc(100vh - 24px);
+  background-color: #ffffff;
+  border: 1px solid #ececec;
+}
+
+.login-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 70px;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 400px;
+  margin-top: 0;
+}
+
+.login-title {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 0 48px 0;
+  font-size: 32px;
+  font-weight: 800;
+  color: #111111;
+  text-align: left;
+}
+
+.find-password-wrap {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -12px;
+  margin-bottom: 24px;
+}
+
+.find-password-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #111111;
+  padding: 0;
+}
+
+.find-password-btn:hover {
+  text-decoration: underline;
+}
+
+.button-group {
+  display: flex;
+  gap: 28px;
+  margin-top: 8px;
+}
+
+.signup-btn,
+.login-btn {
+  flex: 1;
+  height: 52px;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.signup-btn {
+  background-color: #c8dbf2;
+  color: #111111;
+}
+
+.login-btn {
+  background-color: #6695f0;
+  color: white;
+}
+
+.signup-btn:hover,
+.login-btn:hover {
+  opacity: 0.92;
+}

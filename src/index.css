@@ -50,9 +50,44 @@
   }
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
+  font-family: "Arial", sans-serif;
+  background-color: #ffffff;
 }
+
+button,
+input {
+  font: inherit;
+}
+
+.login-header {
+  padding: 28px 24px 0 24px;
+}
+
+.logo-box {
+  width: 54px;
+  height: 54px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-image {
+  width: 68px;
+  height: 68px;
+}
+
+.header-line {
+  margin-top: 18px;
+  border-top: 1px solid #bfbfbf;
+}
+
 
 #root {
   width: 1126px;
