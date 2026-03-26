@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../css/LevelTestPage.css"
 import Header from "../components/Header";
+import InputAnswer from "../components/InputAnswer";
 
 export default function LevelTestPage() {
     const [questions, setQuestions] = useState([]);
@@ -102,7 +103,7 @@ export default function LevelTestPage() {
 
                     <div className="test-layout">
 
-                        {/* 🔹 왼쪽: 문제 영역 */}
+                        {/* 문제 영역 */}
                         <div className="question-area">
                             {questions.map((question, index) => (
                                 <div key={question.id} className="question-card">
@@ -120,34 +121,12 @@ export default function LevelTestPage() {
                                 </div>
                             ))}
                         </div>
-
-                         🔹 오른쪽: 답안 영역
-                        <div className="answer-area">
-                            <h3>답안 작성란</h3>
-
-                            {questions.map((question, index) => (
-                                <div key={question.id} className="answer-row">
-                                    <span>{index + 1}번</span>
-
-                                    {question.choices?.map((choice, i) => (
-                                        <label key={choice.id}>
-                                            <input
-                                                type="radio"
-                                                name={`q-${question.id}`} // 같은 문제끼리 묶기
-                                                checked={answers[question.id] === choice.id}
-                                                onChange={() => handleSelect(question.id, choice.id)}
-                                            />
-                                            {String.fromCharCode(65 + i)}
-                                        </label>
-                                    ))}
-                                </div>
-                            ))}
-
-                            <button onClick={handleSubmit}>
-                                답안 제출
-                            </button>
-                        </div>
-
+                        <InputAnswer
+                            questions={questions}
+                            answers={answers}
+                            onSelect={handleSelect}
+                            onSubmit={handleSubmit}
+                        />
                     </div>
                 </main>
             </div>
