@@ -38,10 +38,10 @@ export default function LoginPage() {
 
             const data = await response.json();
             console.log("로그인 성공:", data);
-            alert("로그인 성공!")
 
             // 예: accessToken localStorage에 저장
             localStorage.setItem("accessToken", data.data.accessToken);
+            localStorage.setItem("userId", data.data.userId);
 
             // 로그인 후 페이지 이동
             navigate("/level-test"); // 메인 페이지로 이동
