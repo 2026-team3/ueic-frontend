@@ -12,8 +12,9 @@ export default function SignupPage() {
         name: "",
         phoneNumber: "",
         preferredMode: "",
-        availableTimes: "",
+        availableTimes: "WEEKDAY_MORNING",
         targetScore: "",
+        studyStyleDescription: "",
     });
 
     const handleChange = (e) => {
@@ -36,6 +37,7 @@ export default function SignupPage() {
             preferredMode: form.preferredMode,
             availableTimes: form.availableTimes ? [form.availableTimes] : [],
             targetScore: Number(form.targetScore),
+            studyStyleDescription: form.studyStyleDescription,
         };
 
         try {
@@ -196,6 +198,17 @@ export default function SignupPage() {
                                         둘 다 가능
                                     </label>
                                 </div>
+                            <div className="tag-field">
+                                <label htmlFor="studyStyleDescription">4. 원하는 스터디 스타일을 입력해주세요</label>
+                                <textarea
+                                    id="studyStyleDescription"
+                                    name="studyStyleDescription"
+                                    placeholder="ex) 집중 공부 / 공부 인증 등"
+                                    value={form.studyStyleDescription || ""}
+                                    onChange={handleChange}
+                                    className="tag-textarea"
+                                />
+                            </div>
                         </div>
 
                         <button
