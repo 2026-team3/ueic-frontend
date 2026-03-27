@@ -1,6 +1,7 @@
 .level-test-page {
     min-height: 100vh;
     background-color: #ffffff;
+    padding: 12px;
 }
 
 .level-test-container {
