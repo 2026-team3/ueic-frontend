@@ -70,11 +70,13 @@
     text-align: left;
 }
 
-.tag-field {
-    margin-bottom: 28px;
+.tag-field-make-std {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
 }
 
-.tag-field label {
+.tag-field-make-std label {
     display: block;
     margin-bottom: 12px;
     font-size: 17px;
@@ -95,9 +97,18 @@
     font-size: 16px;
 }
 
+/* 왼쪽 (라디오) */
+.left-group {
+    flex: 2;
+}
+
+/* 오른쪽 (input) */
+.right-group {
+    flex: 1;
+}
 .radio-group {
     display: flex;
-    gap: 40px;
+    gap: 12px;
     align-items: center;
     flex-wrap: nowrap;
     margin-bottom: 28px;
@@ -108,6 +119,7 @@
     align-items: center;
     gap: 6px;
     white-space: nowrap;
+    flex-wrap: wrap;
 }
 
 .make-study-btn {

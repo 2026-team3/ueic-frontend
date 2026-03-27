@@ -20,28 +20,55 @@ export default function MakeStudyPage(){
                             id="email"
                             name="email"
                             type="email"
-                            placeholder="ex) duksae@gmail.com"
                             // value={form.email}
                             // onChange={handleChange}
                         />
-                        <div className="sinput-row">
-                            <SInputForm
-                                label="최대 모집인원"
-                                id="name"
-                                name="name"
-                                type="text"
-                                placeholder="김덕새"
-                                // value={form.name}
-                                // onChange={handleChange}
-                            />
+                        <div className="tag-field-make-std">
+                            {/* 왼쪽: 온/오프라인 */}
+                            <div className="left-group">
+                                <label htmlFor="preferredMode">온/오프라인 여부</label>
+                                <div className="radio-group">
+                                    <label className="radio-option">
+                                        <input type="radio" name="preferredMode" value="ONLINE" />
+                                        온라인
+                                    </label>
+                                    <label className="radio-option">
+                                        <input type="radio" name="preferredMode" value="OFFLINE" />
+                                        오프라인
+                                    </label>
+                                    <label className="radio-option">
+                                        <input type="radio" name="preferredMode" value="BOTH" />
+                                        둘 다
+                                    </label>
+                                </div>
+                            </div>
 
+                            {/* 오른쪽: 최대 모집 인원 */}
+                            <div className="right-group">
+                                <SInputForm
+                                    label="최대 모집인원"
+                                    id="name"
+                                    name="name"
+                                    type="text"
+                                />
+                            </div>
+                        </div>
+                        <div className="tag-field">
+                            <label htmlFor="studyStyleDescription">원하는 스터디 스타일을 입력해주세요</label>
+                            <textarea
+                                id="studyStyleDescription"
+                                name="studyStyleDescription"
+                                placeholder="ex) 집중 공부 / 공부 인증 등"
+                                // value={form.studyStyleDescription || ""}
+                                // onChange={handleChange}
+                                className="tag-textarea"
+                            />
                         </div>
                         <hr />
                         <p className="tag-instruction">팀 매칭을 위한 태그를 입력해주세요</p>
-
                         <div className="sinput-row">
                             <div className="tag-field">
-                                <label htmlFor="availableTimes">1. 가능 시간대</label>
+                                <label htmlFor="availableTimes">1. 스터디 시간대</label>
                                 <select
                                     id="availableTimes"
                                     name="availableTimes"
@@ -55,7 +82,6 @@ export default function MakeStudyPage(){
                                     <option value="WEEKEND_EVENING">주말 저녁</option>
                                 </select>
                             </div>
-
                             <div className="tag-field">
                                 <label htmlFor="targetScore">2. 목표 점수</label>
                                 <input
@@ -69,53 +95,6 @@ export default function MakeStudyPage(){
                                 />
                             </div>
                         </div>
-                        <div className="tag-field">
-                            <label htmlFor="preferredMode">3. 온/오프라인 여부</label>
-                            <div className="radio-group">
-                                <label className="radio-option">
-                                    <input
-                                        type="radio"
-                                        name="preferredMode"
-                                        value="ONLINE"
-                                        // checked={form.preferredMode === "ONLINE"}
-                                        // onChange={handleChange}
-                                    />
-                                    온라인
-                                </label>
-                                <label className="radio-option">
-                                    <input
-                                        type="radio"
-                                        name="preferredMode"
-                                        value="OFFLINE"
-                                        // checked={form.preferredMode === "OFFLINE"}
-                                        // onChange={handleChange}
-                                    />
-                                    오프라인
-                                </label>
-                                <label className="radio-option">
-                                    <input
-                                        type="radio"
-                                        name="preferredMode"
-                                        value="BOTH"
-                                        // checked={form.preferredMode === "BOTH"}
-                                        // onChange={handleChange}
-                                    />
-                                    둘 다 가능
-                                </label>
-                            </div>
-                            <div className="tag-field">
-                                <label htmlFor="studyStyleDescription">4. 원하는 스터디 스타일을 입력해주세요</label>
-                                <textarea
-                                    id="studyStyleDescription"
-                                    name="studyStyleDescription"
-                                    placeholder="ex) 집중 공부 / 공부 인증 등"
-                                    // value={form.studyStyleDescription || ""}
-                                    // onChange={handleChange}
-                                    className="tag-textarea"
-                                />
-                            </div>
-                        </div>
-
                         <button
                             type="submit"
                             className="make-study-btn"
