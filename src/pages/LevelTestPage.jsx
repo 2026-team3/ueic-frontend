@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../css/LevelTestPage.css"
 import Header from "../components/Header";
 import InputAnswer from "../components/InputAnswer";
@@ -8,6 +9,8 @@ export default function LevelTestPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [answers, setAnswers] = useState({});
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchQuestions = async () => {
@@ -56,6 +59,10 @@ export default function LevelTestPage() {
     };
 
     const handleSubmit = async () => {
+        if (questions.length !== Object.keys(answers).length) {
+            alert("모든 문제를 선택해주세요!");
+            return;
+        }
         try {
             const accessToken = localStorage.getItem("accessToken");
 
@@ -86,6 +93,7 @@ export default function LevelTestPage() {
 
             console.log("제출 성공:", result);
             alert("제출 완료!");
+            navigate('/my-test-result');
 
         } catch (error) {
             console.error(error);
