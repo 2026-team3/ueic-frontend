@@ -26,12 +26,6 @@
     text-align: left;
 }
 
-.info-test{
-    margin-bottom: 24px;
-    margin-left: 120px;
-    text-align: left;
-}
-
 .test-layout{
     display: flex;
     justify-content: space-between;

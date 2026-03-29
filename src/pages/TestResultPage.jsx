@@ -22,7 +22,7 @@ export default function TestResultPage() {
         SENTENCE_INSERT: "문장 삽입"
     };
     console.log(result.correctCountByType);
-
+    console.log("🔥 keys:", Object.keys(result?.correctCountByType || {}));
     const convertWeakType = (type) => weakTypeMap[type] || type;
 
     useEffect(() => {
