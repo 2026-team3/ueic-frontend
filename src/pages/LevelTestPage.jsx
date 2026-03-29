@@ -93,7 +93,7 @@ export default function LevelTestPage() {
 
             console.log("제출 성공:", result);
             alert("제출 완료!");
-            navigate('/my-test-result');
+            navigate('/my-test-result', { state: result });
 
         } catch (error) {
             console.error(error);

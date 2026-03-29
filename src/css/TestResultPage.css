@@ -30,7 +30,7 @@
 }
 
 .score-box {
-    width: 220px;
+    width: 300px;
     padding: 20px;
     border: 2px solid #0099FF;
     border-radius: 12px;
@@ -52,6 +52,7 @@
     background: #CFEBFF;
     padding: 20px;
     border-radius: 12px;
+    text-align: left;
 }
 
 .analysis-list div {
@@ -98,22 +99,50 @@
 
 /* 카드 */
 .study-card {
-    background: #d9d9d9;
-    padding: 16px;
+    background: #F9F9F9;
+    padding: 12px;
     border-radius: 8px;
+    height: 140px;
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
+    flex-direction: column;
+}
+
+.study-name {
+    font-weight: 500;
+    color: black;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.card-bottom {
+    display: flex;
+    justify-content: space-between; /* 왼쪽-오른쪽 */
+    align-items: center;
+}
+
+.card-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
 }
 
 .apply-btn {
     background: #0099FF;
+    align-self: flex-end;
+    width: 50px;
+    height: 32px;
     color: white;
     border: none;
-    padding: 4px 8px;
     border-radius: 6px;
     font-size: 14px;
+    margin-left: 10px;
     cursor: pointer;
+}
+
+.study-info{
+    font-size: 16px;
 }
 
 /* 하단 */

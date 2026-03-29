@@ -1,8 +1,43 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
+import {useLocation} from "react-router-dom";
+import axios from "axios";
 import Header from "../components/Header";
 import "../css/TestResultPage.css";
 
 export default function TestResultPage() {
+    const [weakStudies, setWeakStudies] = useState([]);
+    const [targetStudies, setTargetStudies] = useState([]);
+    const location = useLocation();
+    const result = location.state;
+
+    const weakTypeMap = {
+        VOCABULARY: "어휘",
+        CONTENT_MATCH: "내용 일치",
+        GRAMMAR: "문법",
+        SENTENCE_INSERTION: "문장 삽입",
+        SYNONYM: "동의어 찾기"
+    };
+
+    const convertWeakType = (type) => weakTypeMap[type] || type;
+
+    useEffect(() => {
+        const userId = 1;
+        const token = localStorage.getItem("accessToken");
+
+        const config = token
+            ? { headers: { Authorization: `Bearer ${token}` } }
+            : {};
+
+        axios.get(`/api/matches/weak-type/${userId}`, config)
+            .then(res => setWeakStudies(res.data))
+            .catch(err => console.error("weak error:", err));
+
+        axios.get(`/api/matches/target-score/${userId}`, config)
+            .then(res => setTargetStudies(res.data))
+            .catch(err => console.error("target error:", err));
+
+    }, []);
+
     return (
         <div className="result-page">
             <Header />
@@ -14,11 +49,11 @@ export default function TestResultPage() {
                         <div className="get-down">
                         <div className="score-row">
                             <p>맞춘 개수</p>
-                            <h2 style={{ color: "#0099FF", fontSize:"28px", fontWeight: "800" }}>7 / 10</h2>
+                            <h2 style={{ color: "#0099FF", fontSize:"28px", fontWeight: "800" }}>{result?.correctCount} / {result?.totalCount}</h2>
                         </div>
                         <div className="score-row">
                             <p>취약 분야</p>
-                            <h3 style={{ color: "#0099FF", fontSize:"28px", fontWeight: "700" }}>어휘</h3>
+                            <h3 style={{ color: "#0099FF", fontSize:"28px", fontWeight: "700" }}>{convertWeakType(result?.weakType)}</h3>
                         </div>
                         </div>
                     </div>
@@ -26,11 +61,11 @@ export default function TestResultPage() {
                     <div className="analysis-box">
                         <h3>분야별 진단</h3>
                         <div className="analysis-list">
-                            <div>어휘 - 맞춘 개수:</div>
-                            <div>문장 삽입 - 맞춘 개수:</div>
-                            <div>동의어 찾기 - 맞춘 개수:</div>
-                            <div>내용 일치 - 맞춘 개수:</div>
-                            <div>문법 - 맞춘 개수:</div>
+                            {Object.entries(result.correctCountByType).map(([type, count]) => (
+                                <div key={type}>
+                                    {convertWeakType(type)} - 맞춘 개수: {count}
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
@@ -43,18 +78,18 @@ export default function TestResultPage() {
                         <div className="inner">
                             <span className="tag">취약 파트</span>
                             <div className="study-grid">
-                                {Array(5).fill().map((_, i) => (
-                                    <StudyCard key={i} />
+                                {weakStudies.map((study) => (
+                                    <StudyCard key={study.studyId} study={study} />
                                 ))}
                             </div>
                         </div>
                     </div>
 
                     <div className="study-category">
-                        <span className="tag">목표 점수 기반</span>
+                        <span className="tag">목표 점수</span>
                         <div className="study-grid">
-                            {Array(5).fill().map((_, i) => (
-                                <StudyCard key={i} />
+                            {targetStudies.map((study) => (
+                                <StudyCard key={study.studyId} study={study} />
                             ))}
                         </div>
                     </div>
@@ -65,20 +100,23 @@ export default function TestResultPage() {
                     <p>원하는 스터디를 찾지 못했나요?</p>
                     <button className="create-btn">스터디 생성하기</button>
                 </div>
-
             </div>
         </div>
     );
 }
 
-function StudyCard() {
+function StudyCard({ study }) {
     return (
         <div className="study-card">
             <div className="card-content">
-                <p className="study-name">스터디명</p>
-                <p className="study-info">모집 인원: 2 / 6</p>
+                <p className="study-name">{study.studyName}</p>
             </div>
-            <button className="apply-btn">신청</button>
+            <div className="card-bottom">
+                <p className="study-info">
+                    모집 인원: {study.currentMemberCount} / {study.maxMembers}
+                </p>
+                <button className="apply-btn">신청</button>
+            </div>
         </div>
     );
 }
