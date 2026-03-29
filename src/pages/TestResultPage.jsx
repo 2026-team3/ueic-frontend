@@ -2,22 +2,27 @@ import React, {useEffect, useState} from "react";
 import {useLocation} from "react-router-dom";
 import axios from "axios";
 import Header from "../components/Header";
+import Study_detail_modal from '../components/Study_detail_modal.jsx'
 import "../css/TestResultPage.css";
 
 export default function TestResultPage() {
     const [weakStudies, setWeakStudies] = useState([]);
     const [targetStudies, setTargetStudies] = useState([]);
+    const [selectedStudy, setSelectedStudy] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const location = useLocation();
     const result = location.state;
 
     const weakTypeMap = {
+        SYNONYM: "동의어 찾기",
+        GRAMMAR: "문법",
         VOCABULARY: "어휘",
         CONTENT_MATCH: "내용 일치",
-        GRAMMAR: "문법",
-        SENTENCE_INSERTION: "문장 삽입",
-        SYNONYM: "동의어 찾기"
+        SENTENCE_INSERT: "문장 삽입"
     };
-
+    console.log(result.correctCountByType);
+    console.log("🔥 keys:", Object.keys(result?.correctCountByType || {}));
     const convertWeakType = (type) => weakTypeMap[type] || type;
 
     useEffect(() => {
@@ -61,9 +66,9 @@ export default function TestResultPage() {
                     <div className="analysis-box">
                         <h3>분야별 진단</h3>
                         <div className="analysis-list">
-                            {Object.entries(result.correctCountByType).map(([type, count]) => (
+                            {Object.entries(result?.correctCountByType || {}).map(([type, count]) => (
                                 <div key={type}>
-                                    {convertWeakType(type)} - 맞춘 개수: {count}
+                                    {type} - 맞춘 개수: {count}
                                 </div>
                             ))}
                         </div>
@@ -79,7 +84,12 @@ export default function TestResultPage() {
                             <span className="tag">취약 파트</span>
                             <div className="study-grid">
                                 {weakStudies.map((study) => (
-                                    <StudyCard key={study.studyId} study={study} />
+                                    <StudyCard key={study.studyId} study={study}
+                                        onClick={()=> {
+                                            setSelectedStudy(study);
+                                            setIsModalOpen(true);
+                                        }}
+                                    />
                                 ))}
                             </div>
                         </div>
@@ -89,7 +99,12 @@ export default function TestResultPage() {
                         <span className="tag">목표 점수</span>
                         <div className="study-grid">
                             {targetStudies.map((study) => (
-                                <StudyCard key={study.studyId} study={study} />
+                                <StudyCard key={study.studyId} study={study}
+                                           onClick={()=> {
+                                               setSelectedStudy(study);
+                                               setIsModalOpen(true);
+                                           }}
+                                />
                             ))}
                         </div>
                     </div>
@@ -101,13 +116,20 @@ export default function TestResultPage() {
                     <button className="create-btn">스터디 생성하기</button>
                 </div>
             </div>
+            {isModalOpen && (
+                <Study_detail_modal
+                    study={selectedStudy}
+                    onClose={() => setIsModalOpen(false)}
+                />
+            )}
         </div>
     );
 }
 
-function StudyCard({ study }) {
+
+function StudyCard({ study, onClick }) {
     return (
-        <div className="study-card">
+        <div className="study-card" onClick={onClick}>
             <div className="card-content">
                 <p className="study-name">{study.studyName}</p>
             </div>
@@ -115,8 +137,17 @@ function StudyCard({ study }) {
                 <p className="study-info">
                     모집 인원: {study.currentMemberCount} / {study.maxMembers}
                 </p>
-                <button className="apply-btn">신청</button>
+                <button className="apply-btn"
+                        onClick={(e) => {
+                            e.stopPropagation(); // 카드 클릭 막기
+                            // 신청 로직
+                        }}
+                >
+                    신청
+                </button>
             </div>
         </div>
     );
+
 }
+
