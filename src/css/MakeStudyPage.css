@@ -1,0 +1,144 @@
+
+.make-study-page {
+    min-height: 100vh;
+    padding: 12px;
+    background-color: #ffffff;
+}
+
+.make-study-container {
+    width: 100%;
+    min-height: calc(100vh - 24px);
+    background-color: #ffffff;
+    border: 1px solid #ececec;
+}
+
+.make-study-header {
+    padding: 28px 24px 0 24px;
+}
+
+.make-study-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 70px;
+}
+
+.make-study-form {
+    width: 100%;
+    max-width: 400px;
+    margin-top: 0;
+}
+
+.make-study-title {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 0 48px 0;
+    font-size: 32px;
+    font-weight: 800;
+    color: #111111;
+    text-align: left;
+}
+
+.tag-textarea {
+    width: 100%;
+    height: 150px;
+    padding: 8px 16px;
+    border: 2px solid #7ea7ff;
+    border-radius: 4px;
+    outline: none;
+    background-color: #ffffff;
+    font-size: 16px;
+}
+
+.tag-textarea::placeholder {
+    color: #b7b7b7;
+}
+
+.sinput-row{
+    display: flex;
+    gap: 16px;
+}
+.sinput-row > * {
+    flex: 1;
+}
+
+.tag-instruction {
+    margin: 24px 0 16px 0;
+    font-size: 16px;
+    font-weight: 400;
+    color: gray;
+    text-align: left;
+}
+
+.tag-field-make-std {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.tag-field-make-std label {
+    display: block;
+    margin-bottom: 12px;
+    font-size: 17px;
+    font-weight: 500;
+    color: #111111;
+    text-align: left;
+}
+
+
+.tag-control {
+    width: 100%;
+    height: 56px;
+    padding: 0 16px;
+    border-radius: 4px;
+    outline: none;
+    background-color: #CFEBFF;
+    border: none;
+    font-size: 16px;
+}
+
+/* 왼쪽 (라디오) */
+.left-group {
+    flex: 2;
+}
+
+/* 오른쪽 (input) */
+.right-group {
+    flex: 1;
+}
+.radio-group {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: nowrap;
+    margin-bottom: 28px;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    flex-wrap: wrap;
+}
+
+.make-study-btn {
+    flex: 1;
+    height: 52px;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.make-study-btn {
+    background-color: #6695f0;
+    color: white;
+    width: 50%;
+    margin: 0 0 32px 0;
+}
+
+.make-study-btn:hover{
+    opacity: 0.92;
+}

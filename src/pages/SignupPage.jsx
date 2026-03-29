@@ -1,10 +1,13 @@
 import React, {useState} from "react";
+import { useNavigate } from "react-router-dom";
 import InputForm from "../components/InputForm.jsx";
 import SInputForm from "../components/SInputForm.jsx";
 import Header from "../components/Header.jsx";
 import "../css/SignupPage.css";
 
 export default function SignupPage() {
+    const navigate = useNavigate();
+
     const [form, setForm] = useState({
         email: "",
         password: "",
@@ -59,15 +62,8 @@ export default function SignupPage() {
             }
 
             console.log("회원가입 성공:", result);
-
-            const accessToken = result?.data?.accessToken;
-            if (accessToken) {
-                localStorage.setItem("accessToken", accessToken);
-            }
-
             alert("회원가입이 완료되었습니다.");
-            // 예: 홈이나 테스트 페이지로 이동
-            // navigate("/test");
+                navigate("/");
         } catch (error) {
             console.error("서버 요청 오류:", error);
             alert("서버와 통신 중 오류가 발생했습니다.");
@@ -214,7 +210,7 @@ export default function SignupPage() {
                         <button
                             type="submit"
                             className="main-signup-btn"
-                            onClick={handleSignup}
+                            //onClick={handleSignup}
                         >
                             가입하기
                         </button>
