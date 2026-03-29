@@ -108,7 +108,7 @@ export default function LevelTestPage() {
 
                 <main className="level-test-content">
                     <h1 className="level-test-title">레벨 테스트</h1>
-                    테스트 결과에 따라 맞춤 스터디 그룹을 추천해드립니다 (총 10문항)
+                    <div className="info-test">테스트 결과에 따라 맞춤 스터디 그룹을 추천해드립니다 (총 10문항)</div>
 
                     <div className="test-layout">
 
