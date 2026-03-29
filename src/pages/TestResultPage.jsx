@@ -11,6 +11,7 @@ export default function TestResultPage() {
                 {/* 상단 결과 영역 */}
                 <div className="result-top">
                     <div className="score-box">
+                        <div className="get-down">
                         <div className="score-row">
                             <p>맞춘 개수</p>
                             <h2 style={{ color: "#0099FF", fontSize:"28px", fontWeight: "800" }}>7 / 10</h2>
@@ -18,6 +19,7 @@ export default function TestResultPage() {
                         <div className="score-row">
                             <p>취약 분야</p>
                             <h3 style={{ color: "#0099FF", fontSize:"28px", fontWeight: "700" }}>어휘</h3>
+                        </div>
                         </div>
                     </div>
 
@@ -38,11 +40,13 @@ export default function TestResultPage() {
 
                 <div className="study-section">
                     <div className="study-category">
-                        <span className="tag">취약 파트</span>
-                        <div className="study-grid">
-                            {Array(5).fill().map((_, i) => (
-                                <StudyCard key={i} />
-                            ))}
+                        <div className="inner">
+                            <span className="tag">취약 파트</span>
+                            <div className="study-grid">
+                                {Array(5).fill().map((_, i) => (
+                                    <StudyCard key={i} />
+                                ))}
+                            </div>
                         </div>
                     </div>
 
