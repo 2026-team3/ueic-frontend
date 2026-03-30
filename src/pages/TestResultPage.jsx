@@ -68,7 +68,7 @@ export default function TestResultPage() {
                         <div className="analysis-list">
                             {Object.entries(result?.correctCountByType || {}).map(([type, count]) => (
                                 <div key={type}>
-                                    {type} - 맞춘 개수: {count}
+                                    {convertWeakType(type)} - 맞춘 개수: {count}
                                 </div>
                             ))}
                         </div>
