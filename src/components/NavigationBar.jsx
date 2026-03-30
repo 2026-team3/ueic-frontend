@@ -37,6 +37,8 @@ export default function NavigationBar(){
 
             if (response.data.success) {
                 localStorage.removeItem("accessToken");
+                window.dispatchEvent(new Event("storage"));
+
                 setIsLoggedIn(false); // 상태 업데이트
                 alert(response.data.message);
                 navigate("/");
@@ -61,7 +63,7 @@ export default function NavigationBar(){
                         로그아웃
                     </button>
                 ) : (
-                    <Link to="/" className="logout-btn">
+                    <Link to="/login" className="logout-btn">
                         로그인
                     </Link>
                 )}

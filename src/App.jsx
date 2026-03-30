@@ -7,6 +7,7 @@ import LevelTestPage from './pages/LevelTestPage';
 import TestResultPage from './pages/TestResultPage.jsx'
 import MakeStudyPage from './pages/MakeStudyPage';
 import MyStudiesPage from './pages/MyStudiesPage';
+import MainPage from './pages/MainPage.jsx';
 
 function App() {
 
@@ -14,12 +15,13 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/level-test" element={<LevelTestPage />} />
           <Route path="/my-test-result" element={<TestResultPage  />} />
           <Route path="/make-my-study" element={<MakeStudyPage />} />
           <Route path="/my-studies-list" element={<MyStudiesPage />} />
+          <Route path="/" element={<MainPage />} />
         </Routes>
       </BrowserRouter>
     </>
