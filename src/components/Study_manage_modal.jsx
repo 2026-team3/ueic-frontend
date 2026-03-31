@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import "../css/Study_manage_modal.css";
 
-export default function StudyManageModal({ study, onClose }) {
+export default function StudyManageModal({ study, onClose, onUpdateApplications }) {
     const [members, setMembers] = useState([]);
     const [applications, setApplications] = useState([]);
 
@@ -47,7 +47,18 @@ export default function StudyManageModal({ study, onClose }) {
             );
 
             alert("승인 완료");
-            setApplications(prev => prev.filter(a => a.studyMemberId !== studyMemberId));
+            // 모달 내 상태 업데이트
+            setApplications(prev => {
+                const updated = prev.filter(a => a.studyMemberId !== studyMemberId);
+
+                // 부모 상태는 렌더링 후에 실행
+                setTimeout(() => {
+                    const hasPending = updated.some(a => a.status === "PENDING");
+                    onUpdateApplications(study.studyId, hasPending);
+                }, 0);
+
+                return updated;
+            });
 
         } catch (err) {
             console.error("승인 실패", err.response?.data);
@@ -66,7 +77,15 @@ export default function StudyManageModal({ study, onClose }) {
         );
 
         alert("거절 완료");
-        setApplications(prev => prev.filter(a => a.studyMemberId !== studyMemberId));
+        setApplications(prev => {
+            const updated = prev.filter(a => a.studyMemberId !== studyMemberId);
+            setTimeout(() => {
+                const hasPending = updated.some(a => a.status === "PENDING");
+                onUpdateApplications(study.studyId, hasPending);
+            }, 0);
+
+            return updated;
+        });
     };
 
     const leader = members.find(m => m.role === "LEADER");

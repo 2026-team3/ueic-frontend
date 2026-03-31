@@ -17,26 +17,27 @@ export default function MainPage(){
         const fetchUserInfo = async () => {
             try {
                 const token = localStorage.getItem("accessToken");
-
                 const res = await axios.get("/api/users/me", {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
                 });
-
                 setUserInfo(res.data.data);
             } catch (err) {
                 console.error("유저 정보 조회 실패", err);
             }
         };
+        fetchUserInfo();
+    },[]);
+
+    useEffect(() => {
+        if (!userInfo) return; // userInfo가 준비되지 않으면 스킵
+
         const fetchStudies = async () => {
             try {
                 const token = localStorage.getItem("accessToken");
-
                 const res = await axios.get("/api/studies/me/participations", {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
+                    headers: { Authorization: `Bearer ${token}` }
                 });
                 console.log(res.data.data);
                 setStudies(res.data.data);
@@ -54,28 +55,18 @@ export default function MainPage(){
         const fetchApplications = async (studyId) => {
             try {
                 const token = localStorage.getItem("accessToken");
-
                 const res = await axios.get(`/api/studies/${studyId}/applications`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
+                    headers: { Authorization: `Bearer ${token}` }
                 });
-
                 const hasPending = res.data.data.some(app => app.status === "PENDING");
-
-                setHasNewApplications(prev => ({
-                    ...prev,
-                    [studyId]: hasPending
-                }));
-
+                setHasNewApplications(prev => ({ ...prev, [studyId]: hasPending }));
             } catch (err) {
                 console.error("신청 목록 조회 실패", err);
             }
         };
 
-        fetchUserInfo();
         fetchStudies();
-    }, []);
+    }, [userInfo]);
 
     return(
         <div className="main-page">
