@@ -13,7 +13,7 @@ export default function TestResultPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const location = useLocation();
-    const result = location.state;
+    const result = location.state || null;
 
     const weakTypeMap = {
         SYNONYM: "동의어 찾기",
@@ -22,12 +22,12 @@ export default function TestResultPage() {
         CONTENT_MATCH: "내용 일치",
         SENTENCE_INSERT: "문장 삽입"
     };
-    console.log(result.correctCountByType);
+    console.log(result?.correctCountByType);
 
     const convertWeakType = (type) => weakTypeMap[type] || type;
 
     useEffect(() => {
-        const userId = 1;
+        const userId = localStorage.getItem("userId");
         const token = localStorage.getItem("accessToken");
 
         const config = token
@@ -49,33 +49,43 @@ export default function TestResultPage() {
             <Header />
             <NavigationBar />
             <div className="result-container">
-                <h1 className="result-title">테스트 결과</h1>
-                {/* 상단 결과 영역 */}
-                <div className="result-top">
-                    <div className="score-box">
-                        <div className="get-down">
-                        <div className="score-row">
-                            <p>맞춘 개수</p>
-                            <h2 style={{ color: "#0099FF", fontSize:"28px", fontWeight: "800" }}>{result?.correctCount} / {result?.totalCount}</h2>
-                        </div>
-                        <div className="score-row">
-                            <p>취약 분야</p>
-                            <h3 style={{ color: "#0099FF", fontSize:"28px", fontWeight: "700" }}>{convertWeakType(result?.weakType)}</h3>
-                        </div>
-                        </div>
-                    </div>
+                {result && (
+                    <>
+                        <h1 className="result-title">테스트 결과</h1>
 
-                    <div className="analysis-box">
-                        <h3>분야별 진단</h3>
-                        <div className="analysis-list">
-                            {Object.entries(result?.correctCountByType || {}).map(([type, count]) => (
-                                <div key={type}>
-                                    {convertWeakType(type)} - 맞춘 개수: {count}
+                        {/* 상단 결과 영역 */}
+                        <div className="result-top">
+                            <div className="score-box">
+                                <div className="get-down">
+                                    <div className="score-row">
+                                        <p>맞춘 개수</p>
+                                        <h2 style={{ color: "#0099FF", fontSize:"28px", fontWeight: "800" }}>
+                                            {result.correctCount} / {result.totalCount}
+                                        </h2>
+                                    </div>
+
+                                    <div className="score-row">
+                                        <p>취약 분야</p>
+                                        <h3 style={{ color: "#0099FF", fontSize:"28px", fontWeight: "700" }}>
+                                            {convertWeakType(result.weakType)}
+                                        </h3>
+                                    </div>
                                 </div>
-                            ))}
+                            </div>
+
+                            <div className="analysis-box">
+                                <h3>분야별 진단</h3>
+                                <div className="analysis-list">
+                                    {Object.entries(result.correctCountByType || {}).map(([type, count]) => (
+                                        <div key={type}>
+                                            {convertWeakType(type)} - 맞춘 개수: {count}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    </>
+                )}
 
                 {/* 스터디 조회 */}
                 <h2 className="section-title">스터디 조회</h2>
