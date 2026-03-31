@@ -6,7 +6,7 @@ import "../css/NavigationBar.css";
 export default function NavigationBar(){
     const navigate = useNavigate();
     const menuItems = [
-        { name: "홈", path: "/" },
+        { name: "홈", path: "/mypage" },
         { name: "진단테스트", path: "/level-test" },
         { name: "스터디 참여", path: "my-test-result" },
         { name: "스터디 생성", path: "/make-my-study" },
@@ -53,7 +53,7 @@ export default function NavigationBar(){
         <nav className="navbar">
             <div className="navbar-container">
                 <div className="menu">
-                    <Link to="/">홈</Link>
+                    <Link to="/mypage">홈</Link>
                     <Link to="/level-test">진단테스트</Link>
                     <Link to="/my-test-result">스터디 참여</Link>
                     <Link to="/make-my-study">스터디 생성</Link>
@@ -63,7 +63,7 @@ export default function NavigationBar(){
                         로그아웃
                     </button>
                 ) : (
-                    <Link to="/login" className="logout-btn">
+                    <Link to="/" className="logout-btn">
                         로그인
                     </Link>
                 )}

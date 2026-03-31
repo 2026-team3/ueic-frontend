@@ -15,13 +15,13 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/level-test" element={<LevelTestPage />} />
           <Route path="/my-test-result" element={<TestResultPage  />} />
           <Route path="/make-my-study" element={<MakeStudyPage />} />
           <Route path="/my-studies-list" element={<MyStudiesPage />} />
-          <Route path="/" element={<MainPage />} />
+          <Route path="/mypage" element={<MainPage />} />
         </Routes>
       </BrowserRouter>
     </>

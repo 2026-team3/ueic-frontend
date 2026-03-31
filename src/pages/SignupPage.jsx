@@ -63,7 +63,7 @@ export default function SignupPage() {
 
             console.log("회원가입 성공:", result);
             alert("회원가입이 완료되었습니다.");
-                navigate("/login");
+                navigate("/");
         } catch (error) {
             console.error("서버 요청 오류:", error);
             alert("서버와 통신 중 오류가 발생했습니다.");

@@ -2,7 +2,8 @@ import React, {useEffect, useState} from "react";
 import {useLocation} from "react-router-dom";
 import axios from "axios";
 import Header from "../components/Header";
-import Study_detail_modal from '../components/Study_detail_modal.jsx'
+import Study_detail_modal from '../components/Study_detail_modal.jsx';
+import NavigationBar from '../components/NavigationBar';
 import "../css/TestResultPage.css";
 
 export default function TestResultPage() {
@@ -46,6 +47,7 @@ export default function TestResultPage() {
     return (
         <div className="result-page">
             <Header />
+            <NavigationBar />
             <div className="result-container">
                 <h1 className="result-title">테스트 결과</h1>
                 {/* 상단 결과 영역 */}

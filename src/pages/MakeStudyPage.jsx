@@ -13,7 +13,7 @@ export default function MakeStudyPage(){
 
         if (!token) {
             alert("로그인이 필요합니다.");
-            window.location.href = "/login";
+            window.location.href = "/";
         }
     }, []);
 
@@ -76,6 +76,7 @@ export default function MakeStudyPage(){
             console.log("생성 성공:", data);
 
             alert("스터디 생성 완료!");
+            navigate("/mypage");
         } catch (error) {
             console.error(error);
             alert("에러 발생");

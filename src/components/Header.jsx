@@ -9,7 +9,7 @@ export default function Header() {
     return(
         <header className="login-header">
             <div className="logo-box"
-                 onClick={() => navigate("/")}
+                 onClick={() => navigate("/mypage")}
                  style={{ cursor: "pointer" }}
             >
                 <img src={logo} alt="로고" className="logo-image"  />
