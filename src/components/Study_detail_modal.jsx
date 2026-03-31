@@ -36,6 +36,11 @@ function Study_detail_modal({ study, onClose }) {
                 null, // Body 없음
                 { headers: { Authorization: `Bearer ${token}` } }
             );
+            // 신청 완료 후 멤버 재조회
+            const res = await axios.get(`/api/studies/${study.studyId}/members`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setMembers(res.data.data)
             console.log("토큰:", token);
 
             alert("신청 완료!");

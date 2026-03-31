@@ -24,7 +24,7 @@ export default function MakeStudyPage(){
         targetScore: "",
         availableTimes: "WEEKDAY_MORNING",
         studyStyleDescription: "",
-        weakType: "SYNONYM" // 일단 고정
+        weakType: "SYNONYM"
     });
 
     const handleChange = (e) => {
@@ -62,6 +62,7 @@ export default function MakeStudyPage(){
                     },
                     body: JSON.stringify({
                         ...form,
+                        availableTimes: [form.availableTimes],
                         maxMembers: Number(form.maxMembers),
                         targetScore: Number(form.targetScore),
                     }),
@@ -160,7 +161,7 @@ export default function MakeStudyPage(){
                                 <select
                                     id="availableTimes"
                                     name="availableTimes"
-                                    value={form.availableTimes || ""}
+                                    value={form.availableTimes}
                                     onChange={handleTimeChange}
                                     className="tag-control"
                                 >

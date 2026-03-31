@@ -30,7 +30,7 @@ export default function MainPage(){
             try {
                 const token = localStorage.getItem("accessToken");
 
-                const res = await axios.get("/api/studies/my", {
+                const res = await axios.get("/api/studies/me/participations", {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
