@@ -154,6 +154,12 @@ export default function MainPage(){
                         <Study_manage_modal
                             study={selectedStudy}
                             onClose={() => setSelectedStudy(null)}
+                            onUpdateApplications={(studyId, hasPending) => {
+                                setHasNewApplications(prev => ({
+                                    ...prev,
+                                    [studyId]: hasPending
+                                }));
+                            }}
                         />
                     )}
                 </div>
