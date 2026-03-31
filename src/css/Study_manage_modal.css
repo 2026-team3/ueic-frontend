@@ -1,0 +1,89 @@
+.sm-application-box {
+    margin-top: 16px;
+    padding: 12px;
+    border-radius: 12px;
+    border: 2px solid #54A1FF;
+    margin-bottom: 28px;
+}
+
+.modal-content h2 {
+    font-weight: 500;
+    font-size: 20px;
+}
+
+.sm-application-title {
+    text-align: left;
+    color: #FF9500;
+    font-weight: 600;
+}
+
+.application-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 8px;
+    margin-bottom: 6px;
+}
+
+.application-item span{
+    margin-bottom: 8px;
+    font-size: 20px;
+    color: black;
+    font-weight: 500;
+}
+
+.sm-btn-group button {
+    margin-left: 8px;
+}
+
+.sm-approve-btn{
+    background: #0099FF;
+    color: white;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 18px;
+    font-weight: 400;
+    cursor: pointer;
+}
+.sm-reject-btn {
+    background: #D9D9D9;
+    color: black;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 18px;
+    font-weight: 400;
+    cursor: pointer;
+}
+.sm-modal-buttons button{
+    background: white;
+    color: black;
+    padding: 6px 16px;
+    border: 1px solid gray;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.member-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px; /* 제목-이름 간격 */
+    margin-bottom: 8px;
+}
+
+.member-title {
+    min-width: 40px; /* 팀장/팀원 글자 정렬 맞추기 */
+    font-weight: bold;
+}
+
+.member-list {
+    display: flex;
+    flex-direction: column; /* 팀원 여러 명이면 아래로 */
+}
+
+.member-name {
+    text-align: left;
+}

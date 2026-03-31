@@ -4,11 +4,14 @@ import NavigationBar from "../components/NavigationBar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../css/MainPage.css";
+import Study_manage_modal from "../components/Study_manage_modal";
 
 export default function MainPage(){
     const navigate = useNavigate();
     const [userInfo, setUserInfo] = useState(null);
     const [studies, setStudies] = useState([]);
+    const [selectedStudy, setSelectedStudy] = useState(null);
+    const [hasNewApplications, setHasNewApplications] = useState({});
 
     useEffect(() => {
         const fetchUserInfo = async () => {
@@ -35,10 +38,38 @@ export default function MainPage(){
                         Authorization: `Bearer ${token}`
                     }
                 });
-
+                console.log(res.data.data);
                 setStudies(res.data.data);
+
+                res.data.data.forEach(study => {
+                    if (study.role === "LEADER") {
+                        fetchApplications(study.studyId);
+                    }
+                });
             } catch (err) {
                 console.error("스터디 목록 조회 실패", err);
+            }
+        };
+
+        const fetchApplications = async (studyId) => {
+            try {
+                const token = localStorage.getItem("accessToken");
+
+                const res = await axios.get(`/api/studies/${studyId}/applications`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                const hasPending = res.data.data.some(app => app.status === "PENDING");
+
+                setHasNewApplications(prev => ({
+                    ...prev,
+                    [studyId]: hasPending
+                }));
+
+            } catch (err) {
+                console.error("신청 목록 조회 실패", err);
             }
         };
 
@@ -97,15 +128,34 @@ export default function MainPage(){
 
                     <div className="study-list">
                         {studies.map((study) => (
-                            <div key={study.studyId} className="study-item">
-                                <span>{study.studyName}</span>
+                            <div
+                                key={study.studyId}
+                                className="study-item"
+                                onClick={()=> setSelectedStudy(study)}
+                            >
+                                {/* 왼쪽 */}
+                                <div className="study-left">
+                                    <span>{study.studyName}</span>
 
+                                    {study.role === "LEADER" && hasNewApplications[study.studyId] && (
+                                        <span className="new-badge">신규 신청자</span>
+                                    )}
+                                </div>
+
+                                {/* 오른쪽 */}
                                 <button className="role-btn">
                                     {study.role === "LEADER" ? "팀장" : "팀원"}
                                 </button>
                             </div>
+
                         ))}
                     </div>
+                    {selectedStudy && (
+                        <Study_manage_modal
+                            study={selectedStudy}
+                            onClose={() => setSelectedStudy(null)}
+                        />
+                    )}
                 </div>
             </div>
         </div>
