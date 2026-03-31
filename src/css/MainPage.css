@@ -32,6 +32,9 @@
     align-items: center;
     margin-bottom: 16px;
 }
+.name {
+    font-size: 20px;
+}
 
 .name, .detail-info span {
     width: 120px;

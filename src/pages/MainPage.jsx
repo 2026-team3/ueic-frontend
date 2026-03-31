@@ -1,11 +1,50 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import NavigationBar from "../components/NavigationBar";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "../css/MainPage.css";
 
 export default function MainPage(){
     const navigate = useNavigate();
+    const [userInfo, setUserInfo] = useState(null);
+    const [studies, setStudies] = useState([]);
+
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+            try {
+                const token = localStorage.getItem("accessToken");
+
+                const res = await axios.get("/api/users/me", {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                setUserInfo(res.data.data);
+            } catch (err) {
+                console.error("유저 정보 조회 실패", err);
+            }
+        };
+        const fetchStudies = async () => {
+            try {
+                const token = localStorage.getItem("accessToken");
+
+                const res = await axios.get("/api/studies/my", {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                setStudies(res.data.data);
+            } catch (err) {
+                console.error("스터디 목록 조회 실패", err);
+            }
+        };
+
+        fetchUserInfo();
+        fetchStudies();
+    }, []);
 
     return(
         <div className="main-page">
@@ -22,25 +61,25 @@ export default function MainPage(){
                         <div className="profile-info">
                             {/* 상단: 이름 + 이메일 */}
                             <div className="top-info">
-                                <span className="name">홍길동</span>
-                                <span className="email">email@example.com</span>
+                                <span className="name"> {userInfo?.name || "이름"}</span>
+                                <span className="email">{userInfo?.email || "이메일"}</span>
                             </div>
 
                             {/* 하단: 세로 정렬 */}
                             <div className="detail-info">
                                 <div>
                                     <span>목표 점수</span>
-                                    <p>000 점</p>
+                                    <p>{userInfo?.targetScore || 0} 점</p>
                                 </div>
 
                                 <div>
                                     <span>취약 분야</span>
-                                    <p>어휘</p>
+                                    <p>{userInfo?.weakType === "SYNONYM" ? "어휘" : userInfo?.weakType}</p>
                                 </div>
 
                                 <div>
                                     <span>학습 방식</span>
-                                    <p>온라인</p>
+                                    <p>{userInfo?.preferredMode === "ONLINE" ? "온라인" : "오프라인"}</p>
                                 </div>
                             </div>
                         </div>
@@ -57,15 +96,15 @@ export default function MainPage(){
                     </div>
 
                     <div className="study-list">
-                        <div className="study-item">
-                            <span>스터디명1</span>
-                            <button className="role-btn">팀원</button>
-                        </div>
+                        {studies.map((study) => (
+                            <div key={study.studyId} className="study-item">
+                                <span>{study.studyName}</span>
 
-                        <div className="study-item">
-                            <span>스터디명2</span>
-                            <button className="role-btn">팀장</button>
-                        </div>
+                                <button className="role-btn">
+                                    {study.role === "LEADER" ? "팀장" : "팀원"}
+                                </button>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
