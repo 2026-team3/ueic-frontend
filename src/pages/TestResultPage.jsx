@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import axios from "axios";
 import Header from "../components/Header";
 import Study_detail_modal from '../components/Study_detail_modal.jsx';
@@ -11,7 +11,7 @@ export default function TestResultPage() {
     const [targetStudies, setTargetStudies] = useState([]);
     const [selectedStudy, setSelectedStudy] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-
+    const navigate = useNavigate();
     const location = useLocation();
     const result = location.state || null;
 
@@ -22,7 +22,6 @@ export default function TestResultPage() {
         CONTENT_MATCH: "내용 일치",
         SENTENCE_INSERT: "문장 삽입"
     };
-    console.log(result?.correctCountByType);
 
     const convertWeakType = (type) => weakTypeMap[type] || type;
 
@@ -33,13 +32,34 @@ export default function TestResultPage() {
         const config = token
             ? { headers: { Authorization: `Bearer ${token}` } }
             : {};
+        const deleted = JSON.parse(localStorage.getItem("deletedStudies") || "[]");
 
         axios.get(`/api/matches/weak-type/${userId}`, config)
-            .then(res => setWeakStudies(res.data))
+            .then(res =>
+            {
+                const filtered = res.data.filter(
+                    (study) =>
+                        study &&
+                        study.studyId &&
+                        study.studyName &&
+                        !deleted.includes(study.studyId)
+                );
+                setWeakStudies(filtered);
+            })
             .catch(err => console.error("weak error:", err));
 
         axios.get(`/api/matches/target-score/${userId}`, config)
-            .then(res => setTargetStudies(res.data))
+            .then(res =>
+            {
+                const filtered = res.data.filter(
+                    (study) =>
+                        study &&
+                        study.studyId &&
+                        study.studyName &&
+                        !deleted.includes(study.studyId)
+                );
+                setTargetStudies(filtered);
+            })
             .catch(err => console.error("target error:", err));
 
     }, []);
@@ -95,14 +115,20 @@ export default function TestResultPage() {
                         <div className="inner">
                             <span className="tag">취약 파트</span>
                             <div className="study-grid">
-                                {weakStudies.map((study) => (
-                                    <StudyCard key={study.studyId} study={study}
-                                        onClick={()=> {
-                                            setSelectedStudy(study);
-                                            setIsModalOpen(true);
-                                        }}
-                                    />
-                                ))}
+                                {weakStudies.map((study) => {
+                                    if (!study || !study.studyName) return null;
+
+                                    return (
+                                        <StudyCard
+                                            key={study.studyId}
+                                            study={study}
+                                            onClick={() => {
+                                                setSelectedStudy(study);
+                                                setIsModalOpen(true);
+                                            }}
+                                        />
+                                    );
+                                })}
                             </div>
                         </div>
                     </div>
@@ -110,14 +136,20 @@ export default function TestResultPage() {
                     <div className="study-category">
                         <span className="tag">목표 점수</span>
                         <div className="study-grid">
-                            {targetStudies.map((study) => (
-                                <StudyCard key={study.studyId} study={study}
-                                           onClick={()=> {
-                                               setSelectedStudy(study);
-                                               setIsModalOpen(true);
-                                           }}
-                                />
-                            ))}
+                            {targetStudies.map((study) => {
+                                if (!study || !study.studyName) return null;
+
+                                return (
+                                    <StudyCard
+                                        key={study.studyId}
+                                        study={study}
+                                        onClick={() => {
+                                            setSelectedStudy(study);
+                                            setIsModalOpen(true);
+                                        }}
+                                    />
+                                );
+                            })}
                         </div>
                     </div>
                 </div>
@@ -125,7 +157,12 @@ export default function TestResultPage() {
                 {/* 하단 버튼 */}
                 <div className="bottom-area">
                     <p>원하는 스터디를 찾지 못했나요?</p>
-                    <button className="create-btn">스터디 생성하기</button>
+                    <button
+                        className="create-btn"
+                        onClick={()=> navigate("/make-my-study")}
+                    >
+                        스터디 생성하기
+                    </button>
                 </div>
             </div>
             {isModalOpen && (
