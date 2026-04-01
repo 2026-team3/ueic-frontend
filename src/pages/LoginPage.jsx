@@ -42,6 +42,7 @@ export default function LoginPage() {
             // 예: accessToken localStorage에 저장
             localStorage.setItem("accessToken", data.data.accessToken);
             localStorage.setItem("userId", data.data.userId);
+            window.dispatchEvent(new Event("storage"));
 
             // 로그인 후 페이지 이동
             navigate("/level-test"); // 메인 페이지로 이동

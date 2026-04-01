@@ -2,26 +2,32 @@ import React, {useEffect, useState} from "react";
 import {useLocation} from "react-router-dom";
 import axios from "axios";
 import Header from "../components/Header";
+import Study_detail_modal from '../components/Study_detail_modal.jsx';
+import NavigationBar from '../components/NavigationBar';
 import "../css/TestResultPage.css";
 
 export default function TestResultPage() {
     const [weakStudies, setWeakStudies] = useState([]);
     const [targetStudies, setTargetStudies] = useState([]);
+    const [selectedStudy, setSelectedStudy] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const location = useLocation();
-    const result = location.state;
+    const result = location.state || null;
 
     const weakTypeMap = {
+        SYNONYM: "동의어 찾기",
+        GRAMMAR: "문법",
         VOCABULARY: "어휘",
         CONTENT_MATCH: "내용 일치",
-        GRAMMAR: "문법",
-        SENTENCE_INSERTION: "문장 삽입",
-        SYNONYM: "동의어 찾기"
+        SENTENCE_INSERT: "문장 삽입"
     };
+    console.log(result?.correctCountByType);
 
     const convertWeakType = (type) => weakTypeMap[type] || type;
 
     useEffect(() => {
-        const userId = 1;
+        const userId = localStorage.getItem("userId");
         const token = localStorage.getItem("accessToken");
 
         const config = token
@@ -41,34 +47,45 @@ export default function TestResultPage() {
     return (
         <div className="result-page">
             <Header />
+            <NavigationBar />
             <div className="result-container">
-                <h1 className="result-title">테스트 결과</h1>
-                {/* 상단 결과 영역 */}
-                <div className="result-top">
-                    <div className="score-box">
-                        <div className="get-down">
-                        <div className="score-row">
-                            <p>맞춘 개수</p>
-                            <h2 style={{ color: "#0099FF", fontSize:"28px", fontWeight: "800" }}>{result?.correctCount} / {result?.totalCount}</h2>
-                        </div>
-                        <div className="score-row">
-                            <p>취약 분야</p>
-                            <h3 style={{ color: "#0099FF", fontSize:"28px", fontWeight: "700" }}>{convertWeakType(result?.weakType)}</h3>
-                        </div>
-                        </div>
-                    </div>
+                {result && (
+                    <>
+                        <h1 className="result-title">테스트 결과</h1>
 
-                    <div className="analysis-box">
-                        <h3>분야별 진단</h3>
-                        <div className="analysis-list">
-                            {Object.entries(result.correctCountByType).map(([type, count]) => (
-                                <div key={type}>
-                                    {convertWeakType(type)} - 맞춘 개수: {count}
+                        {/* 상단 결과 영역 */}
+                        <div className="result-top">
+                            <div className="score-box">
+                                <div className="get-down">
+                                    <div className="score-row">
+                                        <p>맞춘 개수</p>
+                                        <h2 style={{ color: "#0099FF", fontSize:"28px", fontWeight: "800" }}>
+                                            {result.correctCount} / {result.totalCount}
+                                        </h2>
+                                    </div>
+
+                                    <div className="score-row">
+                                        <p>취약 분야</p>
+                                        <h3 style={{ color: "#0099FF", fontSize:"28px", fontWeight: "700" }}>
+                                            {convertWeakType(result.weakType)}
+                                        </h3>
+                                    </div>
                                 </div>
-                            ))}
+                            </div>
+
+                            <div className="analysis-box">
+                                <h3>분야별 진단</h3>
+                                <div className="analysis-list">
+                                    {Object.entries(result.correctCountByType || {}).map(([type, count]) => (
+                                        <div key={type}>
+                                            {convertWeakType(type)} - 맞춘 개수: {count}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    </>
+                )}
 
                 {/* 스터디 조회 */}
                 <h2 className="section-title">스터디 조회</h2>
@@ -79,7 +96,12 @@ export default function TestResultPage() {
                             <span className="tag">취약 파트</span>
                             <div className="study-grid">
                                 {weakStudies.map((study) => (
-                                    <StudyCard key={study.studyId} study={study} />
+                                    <StudyCard key={study.studyId} study={study}
+                                        onClick={()=> {
+                                            setSelectedStudy(study);
+                                            setIsModalOpen(true);
+                                        }}
+                                    />
                                 ))}
                             </div>
                         </div>
@@ -89,7 +111,12 @@ export default function TestResultPage() {
                         <span className="tag">목표 점수</span>
                         <div className="study-grid">
                             {targetStudies.map((study) => (
-                                <StudyCard key={study.studyId} study={study} />
+                                <StudyCard key={study.studyId} study={study}
+                                           onClick={()=> {
+                                               setSelectedStudy(study);
+                                               setIsModalOpen(true);
+                                           }}
+                                />
                             ))}
                         </div>
                     </div>
@@ -101,13 +128,20 @@ export default function TestResultPage() {
                     <button className="create-btn">스터디 생성하기</button>
                 </div>
             </div>
+            {isModalOpen && (
+                <Study_detail_modal
+                    study={selectedStudy}
+                    onClose={() => setIsModalOpen(false)}
+                />
+            )}
         </div>
     );
 }
 
-function StudyCard({ study }) {
+
+function StudyCard({ study, onClick }) {
     return (
-        <div className="study-card">
+        <div className="study-card" onClick={onClick}>
             <div className="card-content">
                 <p className="study-name">{study.studyName}</p>
             </div>
@@ -115,8 +149,17 @@ function StudyCard({ study }) {
                 <p className="study-info">
                     모집 인원: {study.currentMemberCount} / {study.maxMembers}
                 </p>
-                <button className="apply-btn">신청</button>
+                <button className="apply-btn"
+                        onClick={(e) => {
+                            e.stopPropagation(); // 카드 클릭 막기
+                            // 신청 로직
+                        }}
+                >
+                    신청
+                </button>
             </div>
         </div>
     );
+
 }
+

@@ -1,6 +1,5 @@
 .result-page {
     min-height: 100vh;
-    padding: 12px;
 }
 
 .result-container {
@@ -42,6 +41,9 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 12px;
+}
+.score-row p{
+    font-size: 18px;
 }
 
 .get-down{

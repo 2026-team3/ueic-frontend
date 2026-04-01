@@ -30,7 +30,6 @@ export const fetchWithAuth = async (url, options = {}) => {
     if (response.status === 401 || response.status === 403) {
         try {
             token = await refreshToken();
-
             response = await fetch(url, {
                 ...options,
                 headers: {

@@ -13,7 +13,7 @@ export default function MakeStudyPage(){
 
         if (!token) {
             alert("로그인이 필요합니다.");
-            window.location.href = "/login";
+            window.location.href = "/";
         }
     }, []);
 
@@ -24,7 +24,7 @@ export default function MakeStudyPage(){
         targetScore: "",
         availableTimes: "WEEKDAY_MORNING",
         studyStyleDescription: "",
-        weakType: "SYNONYM" // 일단 고정
+        weakType: "SYNONYM"
     });
 
     const handleChange = (e) => {
@@ -62,6 +62,7 @@ export default function MakeStudyPage(){
                     },
                     body: JSON.stringify({
                         ...form,
+                        availableTimes: [form.availableTimes],
                         maxMembers: Number(form.maxMembers),
                         targetScore: Number(form.targetScore),
                     }),
@@ -76,6 +77,7 @@ export default function MakeStudyPage(){
             console.log("생성 성공:", data);
 
             alert("스터디 생성 완료!");
+            navigate("/mypage");
         } catch (error) {
             console.error(error);
             alert("에러 발생");
@@ -159,7 +161,7 @@ export default function MakeStudyPage(){
                                 <select
                                     id="availableTimes"
                                     name="availableTimes"
-                                    value={form.availableTimes || ""}
+                                    value={form.availableTimes}
                                     onChange={handleTimeChange}
                                     className="tag-control"
                                 >
