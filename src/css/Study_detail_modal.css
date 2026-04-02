@@ -76,7 +76,7 @@
 .apply-study-btn{
     background: #0099FF;
     align-self: flex-end;
-    width: 80px;
+    width: 50px;
     height: 32px;
     color: white;
     border: none;
@@ -91,19 +91,6 @@
     align-self: flex-end;
     width: 50px;
     height: 32px;
-    border: none;
-    font-size: 16px;
-    font-weight: 600;
-    margin-left: 10px;
-    cursor: pointer;
-}
-
-.pending-detail {
-    background: #cccccc;
-    align-self: flex-end;
-    width: 80px;
-    height: 32px;
-    color: white;
     border: none;
     font-size: 16px;
     font-weight: 600;

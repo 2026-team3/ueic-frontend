@@ -12,7 +12,6 @@ export default function MainPage(){
     const [studies, setStudies] = useState([]);
     const [selectedStudy, setSelectedStudy] = useState(null);
     const [hasNewApplications, setHasNewApplications] = useState({});
-    const [pendingStudies, setPendingStudies] = useState([]);
 
     const weakTypeMap = {
         SYNONYM: "동의어 찾기",
@@ -66,25 +65,6 @@ export default function MainPage(){
 
         fetchStudies();
     }, [userInfo]);
-
-    // 승인 대기 중인 스터디도 표시
-    useEffect(() => {
-        const pending = JSON.parse(localStorage.getItem("pendingStudies") || "[]");
-        setPendingStudies(pending);
-    }, []);
-
-    // 승인되면 위 스터디 안 보이게
-    useEffect(() => {
-        const pending = JSON.parse(localStorage.getItem("pendingStudies") || "[]");
-
-        const filtered = pending.filter(
-            p => !studies.some(s => s.studyId === p.studyId)
-        );
-
-        localStorage.setItem("pendingStudies", JSON.stringify(filtered));
-        setPendingStudies(filtered);
-
-    }, [studies]);
 
     return(
         <div className="main-page">
@@ -158,16 +138,6 @@ export default function MainPage(){
                             </div>
 
                         ))}
-                        {/* 승인 대기 */}
-                        {pendingStudies
-                            .filter(study => study.role !== "LEADER")
-                            .map((study) => (
-                                <div key={study.studyId} className="study-item pending"
-                                     onClick={()=> setSelectedStudy(study)}>
-                                    <span>{study.studyName}</span>
-                                    <span className="pending-badge">승인 대기</span>
-                                </div>
-                            ))}
                     </div>
                     {selectedStudy && (
                         <Study_manage_modal

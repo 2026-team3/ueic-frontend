@@ -2,13 +2,11 @@ import { useEffect, useState } from "react";
 import "../css/Study_detail_modal.css"
 import api from "../apis/axiosInstance.jsx";
 
-function Study_detail_modal({ study, onClose, setPendingStudies }) {
+function Study_detail_modal({ study, onClose }) {
     if (!study) return null;
 
     const [members, setMembers] = useState([]);
     const leader = members.find(m => m.role === "LEADER");
-    const pending = JSON.parse(localStorage.getItem("pendingStudies") || "[]");
-    const isPending = pending.some(p => p.studyId === study.studyId);
 
     useEffect(() => {
         if (!study) return;
@@ -34,35 +32,11 @@ function Study_detail_modal({ study, onClose, setPendingStudies }) {
             const res = await api.get(`/studies/${study.studyId}/members`);
             setMembers(res.data.data);
 
-            // 로컬에 저장 (신청 중인 것도 표시)
-            const pending = JSON.parse(localStorage.getItem("pendingStudies") || "[]");
-            if (!pending.includes(study.studyId)) {
-                const updated = [...pending, study.studyId];
-                localStorage.setItem("pendingStudies", JSON.stringify(updated));
-
-                setPendingStudies(updated);
-            }
-
             alert("신청 완료!");
             onClose();
 
         } catch (error) {
-            const code = error.response?.data?.code;
-
-            if (code === "S003") {
-                alert("이미 신청한 스터디입니다.");
-
-                const pending = JSON.parse(localStorage.getItem("pendingStudies") || "[]");
-
-                if (!pending.some(p => p.studyId === study.studyId)) {
-                    localStorage.setItem(
-                        "pendingStudies",
-                        JSON.stringify([...pending, study])
-                    );
-                }s
-                onClose();
-                return;
-            }
+            console.error(error);
             alert("신청 실패");
         }
     };
@@ -114,14 +88,9 @@ function Study_detail_modal({ study, onClose, setPendingStudies }) {
 
                 <div className="modal-buttons">
                     <button className="cancel-btn" onClick={onClose}>취소</button>
-                    <button className={`apply-btn ${isPending ? "pending-detail" : ""}`}
-                            onClick={handleApply}
-                            disabled={isPending}
-                    >
-                        {isPending ? "승인 대기" : "신청"}
-                    </button>
+                    <button className="apply-study-btn" onClick={handleApply}>신청</button>
                 </div>
             </div>
         </div>
     );
-}export default Study_detail_modal
+}export default Study_detail_modal;
