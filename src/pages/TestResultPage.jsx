@@ -15,6 +15,14 @@ export default function TestResultPage() {
     const location = useLocation();
     const result = location.state || null;
 
+    const pending = JSON.parse(localStorage.getItem("pendingStudies") || "[]");
+    const [pendingStudies, setPendingStudies] = useState([]);
+
+    useEffect(() => {
+        const pending = JSON.parse(localStorage.getItem("pendingStudies") || "[]");
+        setPendingStudies(pending);
+    }, []);
+
     const weakTypeMap = {
         SYNONYM: "동의어 찾기",
         GRAMMAR: "문법",
@@ -109,6 +117,8 @@ export default function TestResultPage() {
                                         <StudyCard
                                             key={study.studyId}
                                             study={study}
+                                            pendingStudies={pendingStudies}
+                                            setPendingStudies={setPendingStudies}
                                             onClick={() => {
                                                 setSelectedStudy(study);
                                                 setIsModalOpen(true);
@@ -130,6 +140,8 @@ export default function TestResultPage() {
                                     <StudyCard
                                         key={study.studyId}
                                         study={study}
+                                        pendingStudies={pendingStudies}
+                                        setPendingStudies={setPendingStudies}
                                         onClick={() => {
                                             setSelectedStudy(study);
                                             setIsModalOpen(true);
@@ -156,6 +168,7 @@ export default function TestResultPage() {
                 <Study_detail_modal
                     study={selectedStudy}
                     onClose={() => setIsModalOpen(false)}
+                    setPendingStudies={setPendingStudies}
                 />
             )}
         </div>
@@ -163,7 +176,8 @@ export default function TestResultPage() {
 }
 
 
-function StudyCard({ study, onClick }) {
+function StudyCard({ study, onClick, pendingStudies, setPendingStudies }) {
+    const isPending = (pendingStudies || []).includes(study.studyId);
     return (
         <div className="study-card" onClick={onClick}>
             <div className="card-content">
@@ -173,13 +187,21 @@ function StudyCard({ study, onClick }) {
                 <p className="study-info">
                     모집 인원: {study.currentMemberCount} / {study.maxMembers}
                 </p>
-                <button className="apply-btn"
+                <button className={`apply-btn ${isPending ? "pending" : ""}`}
                         onClick={(e) => {
-                            e.stopPropagation(); // 카드 클릭 막기
-                            // 신청 로직
+                            e.stopPropagation();
+
+                            if (!isPending) {
+                                const updated = [...pendingStudies, study.studyId];
+                                setPendingStudies(updated);
+                                localStorage.setItem("pendingStudies", JSON.stringify(updated));
+                            }
+
+                            onClick(); // 모달 열기
                         }}
+                        disabled={isPending}
                 >
-                    신청
+                    {isPending ? "승인 중" : "신청"}
                 </button>
             </div>
         </div>

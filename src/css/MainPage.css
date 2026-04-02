@@ -147,3 +147,11 @@
     padding: 6px 12px;
     border-radius: 6px;
 }
+
+.pending-badge {
+    background: #FF9500;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+}
