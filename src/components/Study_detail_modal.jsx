@@ -114,11 +114,11 @@ function Study_detail_modal({ study, onClose, setPendingStudies }) {
 
                 <div className="modal-buttons">
                     <button className="cancel-btn" onClick={onClose}>취소</button>
-                    <button className={`apply-study-btn ${isPending ? "pending-detail" : ""}`}
+                    <button className={`apply-btn ${isPending ? "pending-detail" : ""}`}
                             onClick={handleApply}
                             disabled={isPending}
                     >
-                        {isPending ? "승인 중" : "신청"}
+                        {isPending ? "승인 대기" : "신청"}
                     </button>
                 </div>
             </div>

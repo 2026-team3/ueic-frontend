@@ -13,6 +13,12 @@
     z-index: 999;
 }
 
+.study-detail-title {
+    text-align: left;
+    font-size: 18px;
+    font-weight: 550;
+}
+
 .modal-content {
     background: white;
     padding: 24px;
@@ -20,11 +26,6 @@
     width: 400px;
 }
 
-.modal-content h2 {
-    text-align: left;
-    font-size: 16px;
-    font-weight: 600;
-}
 .modal-box {
     background: #CFEBFF;
     padding: 16px;
@@ -48,7 +49,6 @@
 
 .hashtag {
     margin-top: 32px;
-
 }
 
 .info-row {
@@ -98,7 +98,7 @@
     cursor: pointer;
 }
 
-.apply-study-btn.pending-detail {
+.pending-detail {
     background: #cccccc;
     align-self: flex-end;
     width: 80px;
@@ -108,5 +108,5 @@
     font-size: 16px;
     font-weight: 600;
     margin-left: 10px;
-    border-radius: 0;
+    cursor: pointer;
 }

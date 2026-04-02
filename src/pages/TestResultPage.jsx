@@ -190,7 +190,14 @@ function StudyCard({ study, onClick, pendingStudies, setPendingStudies }) {
                 <button className={`apply-btn ${isPending ? "pending" : ""}`}
                         onClick={(e) => {
                             e.stopPropagation();
-                            onClick(); // 그냥 모달만 열기
+
+                            if (!isPending) {
+                                const updated = [...pendingStudies, study.studyId];
+                                setPendingStudies(updated);
+                                localStorage.setItem("pendingStudies", JSON.stringify(updated));
+                            }
+
+                            onClick(); // 모달 열기
                         }}
                         disabled={isPending}
                 >
