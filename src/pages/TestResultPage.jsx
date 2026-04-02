@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
-import axios from "axios";
+import api from "../apis/axiosInstance.jsx";
 import Header from "../components/Header";
 import Study_detail_modal from '../components/Study_detail_modal.jsx';
 import NavigationBar from '../components/NavigationBar';
@@ -27,41 +27,28 @@ export default function TestResultPage() {
 
     useEffect(() => {
         const userId = localStorage.getItem("userId");
-        const token = localStorage.getItem("accessToken");
-
-        const config = token
-            ? { headers: { Authorization: `Bearer ${token}` } }
-            : {};
         const deleted = JSON.parse(localStorage.getItem("deletedStudies") || "[]");
 
-        axios.get(`/api/matches/weak-type/${userId}`, config)
-            .then(res =>
-            {
-                const filtered = res.data.filter(
-                    (study) =>
-                        study &&
-                        study.studyId &&
-                        study.studyName &&
-                        !deleted.includes(study.studyId)
-                );
-                setWeakStudies(filtered);
-            })
-            .catch(err => console.error("weak error:", err));
+        const fetchData = async () => {
+            try {
+                const weakRes = await api.get(`/matches/weak-type/${userId}`);
+                const targetRes = await api.get(`/matches/target-score/${userId}`);
 
-        axios.get(`/api/matches/target-score/${userId}`, config)
-            .then(res =>
-            {
-                const filtered = res.data.filter(
-                    (study) =>
-                        study &&
-                        study.studyId &&
-                        study.studyName &&
-                        !deleted.includes(study.studyId)
-                );
-                setTargetStudies(filtered);
-            })
-            .catch(err => console.error("target error:", err));
+                const filterFn = (study) =>
+                    study &&
+                    study.studyId &&
+                    study.studyName &&
+                    !deleted.includes(study.studyId);
 
+                setWeakStudies(weakRes.data.filter(filterFn));
+                setTargetStudies(targetRes.data.filter(filterFn));
+
+            } catch (err) {
+                console.error("추천 스터디 조회 실패:", err);
+            }
+        };
+
+        fetchData();
     }, []);
 
     return (

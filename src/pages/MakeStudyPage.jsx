@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
-import {fetchWithAuth} from "../apis/fetchWithAuth";
+// import {fetchWithAuth} from "../apis/fetchWithAuth";
+import api from "../apis/axiosInstance.jsx";
 import Header from "../components/Header.jsx";
 import InputForm from "../components/InputForm.jsx";
 import SInputForm from "../components/SInputForm.jsx";
@@ -53,31 +54,16 @@ export default function MakeStudyPage(){
         });
 
         try {
-            const response = await fetchWithAuth(
-                "http://localhost:8080/api/studies",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        ...form,
-                        availableTimes: [form.availableTimes],
-                        maxMembers: Number(form.maxMembers),
-                        targetScore: Number(form.targetScore),
-                    }),
+            const res = await api.post("/studies", {
+                ...form,
+                availableTimes: [form.availableTimes],
+                maxMembers: Number(form.maxMembers),
+                targetScore: Number(form.targetScore),
                 }
             );
-
-            if (!response.ok) {
-                throw new Error("스터디 생성 실패");
-            }
-
-            const data = await response.json();
-            console.log("생성 성공:", data);
-
             alert("스터디 생성 완료!");
             navigate("/mypage");
+
         } catch (error) {
             console.error(error);
             alert("에러 발생");

@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../apis/axiosInstance.jsx";
 import InputForm from "../components/InputForm.jsx";
 import SInputForm from "../components/SInputForm.jsx";
 import Header from "../components/Header.jsx";
@@ -44,29 +45,16 @@ export default function SignupPage() {
         };
 
         try {
-            const response = await fetch("/api/auth/signup", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify(payload),
-            });
+            const res = await api.post("/auth/signup", payload);
 
-            const result = await response.json();
-
-            if (!response.ok) {
-                console.error("회원가입 실패:", result);
-                alert(result.message || "회원가입에 실패했습니다.");
-                return;
-            }
-
-            console.log("회원가입 성공:", result);
+            console.log("회원가입 성공:", res.data);
             alert("회원가입이 완료되었습니다.");
-                navigate("/");
+            navigate("/");
+
         } catch (error) {
-            console.error("서버 요청 오류:", error);
-            alert("서버와 통신 중 오류가 발생했습니다.");
+            console.error("회원가입 실패:", error.response?.data);
+            alert(error.response?.data?.message ||
+                "회원가입에 실패했습니다.");
         }
 
     };

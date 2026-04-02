@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import NavigationBar from "../components/NavigationBar";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../apis/axiosInstance.jsx";
 import "../css/MainPage.css";
 import Study_manage_modal from "../components/Study_manage_modal";
 
@@ -25,12 +25,7 @@ export default function MainPage(){
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
-                const token = localStorage.getItem("accessToken");
-                const res = await axios.get("/api/users/me", {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
+                const res = await api.get("/users/me");
                 setUserInfo(res.data.data);
             } catch (err) {
                 console.error("유저 정보 조회 실패", err);
@@ -44,11 +39,7 @@ export default function MainPage(){
 
         const fetchStudies = async () => {
             try {
-                const token = localStorage.getItem("accessToken");
-                const res = await axios.get("/api/studies/me/participations", {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                console.log(res.data.data);
+                const res = await api.get("/studies/me/participations");
                 setStudies(res.data.data);
 
                 res.data.data.forEach(study => {
@@ -63,11 +54,9 @@ export default function MainPage(){
 
         const fetchApplications = async (studyId) => {
             try {
-                const token = localStorage.getItem("accessToken");
-                const res = await axios.get(`/api/studies/${studyId}/applications`, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
+                const res = await api.get(`/studies/${studyId}/applications`);
                 const hasPending = res.data.data.some(app => app.status === "PENDING");
+
                 setHasNewApplications(prev => ({ ...prev, [studyId]: hasPending }));
             } catch (err) {
                 console.error("신청 목록 조회 실패", err);
