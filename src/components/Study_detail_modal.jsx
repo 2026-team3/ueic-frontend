@@ -37,7 +37,11 @@ function Study_detail_modal({ study, onClose }) {
 
         } catch (error) {
             console.error(error);
-            alert("신청 실패");
+            if (error.response?.status === 400) {
+                alert("이미 신청한 스터디입니다. 승인 대기 중입니다.");
+            } else {
+                alert("신청 실패");
+            }
         }
     };
 

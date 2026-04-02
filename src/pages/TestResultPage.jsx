@@ -38,7 +38,7 @@ export default function TestResultPage() {
                     study &&
                     study.studyId &&
                     study.studyName &&
-                    !deleted.includes(study.studyId);
+                    !deleted.includes(String(study.studyId));
 
                 setWeakStudies(weakRes.data.filter(filterFn));
                 setTargetStudies(targetRes.data.filter(filterFn));
@@ -164,6 +164,9 @@ export default function TestResultPage() {
 
 
 function StudyCard({ study, onClick }) {
+    const pendingStudies = JSON.parse(localStorage.getItem("pendingStudies") || "[]");
+    const isPending = pendingStudies.includes(study.studyId);
+
     return (
         <div className="study-card" onClick={onClick}>
             <div className="card-content">
@@ -176,7 +179,8 @@ function StudyCard({ study, onClick }) {
                 <button className="apply-btn"
                         onClick={(e) => {
                             e.stopPropagation(); // 카드 클릭 막기
-                            // 신청 로직
+                            onClick();
+
                         }}
                 >
                     신청

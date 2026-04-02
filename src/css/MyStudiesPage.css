@@ -17,9 +17,10 @@
 
 /* 카드 리스트 */
 .my-study-card-list {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, auto);
     justify-content: center;
-    gap: 40px;
+    gap: 20px;
 }
 
 /* 카드 */
