@@ -160,12 +160,21 @@ export default function MainPage(){
                         ))}
                         {/* 승인 대기 */}
                         {pendingStudies
-                            .filter(study => study.role !== "LEADER")
+                            .filter(study => study && study.studyId)
                             .map((study) => (
-                                <div key={study.studyId} className="study-item pending"
-                                     onClick={()=> setSelectedStudy(study)}>
-                                    <span>{study.studyName}</span>
-                                    <span className="pending-badge">승인 대기</span>
+                                <div
+                                    key={`pending-${study.studyId}`}
+                                    className="study-item"
+                                >
+                                    {/* 왼쪽 */}
+                                    <div className="study-left">
+                                        <span>{study.studyName}</span>
+                                    </div>
+
+                                    {/* 오른쪽 */}
+                                    <button className="pending-btn">
+                                        승인 대기
+                                    </button>
                                 </div>
                             ))}
                     </div>
