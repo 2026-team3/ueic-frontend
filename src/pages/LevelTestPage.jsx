@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../css/LevelTestPage.css"
 import Header from "../components/Header";
 import InputAnswer from "../components/InputAnswer";
+import api from "../apis/axiosInstance.jsx";
 
 export default function LevelTestPage() {
     const [questions, setQuestions] = useState([]);
@@ -15,27 +16,10 @@ export default function LevelTestPage() {
     useEffect(() => {
         const fetchQuestions = async () => {
             try {
-                const accessToken = localStorage.getItem("accessToken");
+                const res = await api.get("/questions/random?countPerType=2");
+                const data = res.data?.data || res.data || [];
+                setQuestions(Array.isArray(data) ? data : []);
 
-                const response = await fetch("http://localhost:8080/api/questions/random?countPerType=2", {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                    credentials: "include",
-                });
-
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    console.error("문제 조회 실패:", response.status, errorText);
-                    throw new Error(`문제 조회 실패 (${response.status})`);
-                }
-
-                const result = await response.json();
-                console.log("문제 조회 성공:", result);
-
-                setQuestions(result.data || result);
             } catch (err) {
                 console.error(err);
                 setError(err.message);
@@ -64,8 +48,6 @@ export default function LevelTestPage() {
             return;
         }
         try {
-            const accessToken = localStorage.getItem("accessToken");
-
             const payload = {
                 userId: Number(localStorage.getItem("userId")),
                 answers: Object.entries(answers).map(([questionId, choiceId]) => ({
@@ -74,22 +56,8 @@ export default function LevelTestPage() {
                 }))
             };
 
-            const response = await fetch("http://localhost:8080/api/questions/submit", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${accessToken}`,
-                },
-                body: JSON.stringify(payload),
-            });
-
-            const result = await response.json();
-
-            if (!response.ok) {
-                console.error("제출 실패:", result);
-                alert("제출 실패");
-                return;
-            }
+            const res = await api.post("/questions/submit", payload);
+            const result = res.data;
 
             console.log("제출 성공:", result);
             alert("제출 완료!");

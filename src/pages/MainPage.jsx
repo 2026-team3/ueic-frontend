@@ -13,6 +13,15 @@ export default function MainPage(){
     const [selectedStudy, setSelectedStudy] = useState(null);
     const [hasNewApplications, setHasNewApplications] = useState({});
 
+    const weakTypeMap = {
+        SYNONYM: "동의어 찾기",
+        GRAMMAR: "문법",
+        VOCABULARY: "어휘",
+        CONTENT_MATCH: "내용 일치",
+        SENTENCE_INSERT: "문장 삽입"
+    };
+    const convertWeakType = (type) => weakTypeMap[type] || type;
+
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
@@ -96,7 +105,7 @@ export default function MainPage(){
 
                                 <div>
                                     <span>취약 분야</span>
-                                    <p>{userInfo?.weakType === "SYNONYM" ? "어휘" : userInfo?.weakType}</p>
+                                    <p>{convertWeakType(userInfo?.weakType)}</p>
                                 </div>
 
                                 <div>

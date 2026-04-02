@@ -21,7 +21,8 @@ api.interceptors.response.use(
         const originalRequest = error.config;
 
         // 403 or 401 → 토큰 만료
-        if (error.response?.status === 403 && !originalRequest._retry) {
+        if ((error.response?.status === 401 || error.response?.status === 403)
+            && !originalRequest._retry) {
             originalRequest._retry = true;
 
             try {
