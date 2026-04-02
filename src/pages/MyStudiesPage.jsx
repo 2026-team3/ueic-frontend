@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import Header from "../components/Header";
 import NavigationBar from "../components/NavigationBar";
-import axios from "axios";
 import api from "../apis/axiosInstance.jsx";
 import "../css/MyStudiesPage.css";
 
@@ -12,15 +11,9 @@ export default function MyStudiesPage(){
         const fetchMyStudies = async () => {
             try {
                 const token = localStorage.getItem("accessToken");
-
-                const res = await axios.get("/api/studies/me/participations", {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
+                const res = await api.get("/studies/me/participations");
                 setStudies(res.data.data);
                 console.log(res.data.data);
-                console.log("token:", token);
 
             } catch (err) {
                 console.error("스터디 목록 조회 실패", err);
@@ -51,9 +44,15 @@ export default function MyStudiesPage(){
 
         try {
             const token = localStorage.getItem("accessToken");
-            const res = await axios.delete(`/api/studies/${studyId}`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+            const res = await api.delete(`/studies/${studyId}`);
+            const deleted = JSON.parse(localStorage.getItem("deletedStudies") || "[]");
+            localStorage.setItem(
+                "deletedStudies",
+                JSON.stringify([...deleted, studyId])
+            );
+            localStorage.getItem("deletedStudies");
+            console.log("deleted:", deleted);
+            console.log("studyId:", studyId);
             alert(res.data.data);
             setStudies((prev) => prev.filter((s) => s.studyId !== studyId));
         } catch (err) {

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {useLocation} from "react-router-dom";
-import axios from "axios";
+import {useLocation, useNavigate} from "react-router-dom";
+import api from "../apis/axiosInstance.jsx";
 import Header from "../components/Header";
 import Study_detail_modal from '../components/Study_detail_modal.jsx';
 import NavigationBar from '../components/NavigationBar';
@@ -11,7 +11,7 @@ export default function TestResultPage() {
     const [targetStudies, setTargetStudies] = useState([]);
     const [selectedStudy, setSelectedStudy] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-
+    const navigate = useNavigate();
     const location = useLocation();
     const result = location.state || null;
 
@@ -22,26 +22,33 @@ export default function TestResultPage() {
         CONTENT_MATCH: "내용 일치",
         SENTENCE_INSERT: "문장 삽입"
     };
-    console.log(result?.correctCountByType);
 
     const convertWeakType = (type) => weakTypeMap[type] || type;
 
     useEffect(() => {
         const userId = localStorage.getItem("userId");
-        const token = localStorage.getItem("accessToken");
+        const deleted = JSON.parse(localStorage.getItem("deletedStudies") || "[]");
 
-        const config = token
-            ? { headers: { Authorization: `Bearer ${token}` } }
-            : {};
+        const fetchData = async () => {
+            try {
+                const weakRes = await api.get(`/matches/weak-type/${userId}`);
+                const targetRes = await api.get(`/matches/target-score/${userId}`);
 
-        axios.get(`/api/matches/weak-type/${userId}`, config)
-            .then(res => setWeakStudies(res.data))
-            .catch(err => console.error("weak error:", err));
+                const filterFn = (study) =>
+                    study &&
+                    study.studyId &&
+                    study.studyName &&
+                    !deleted.includes(String(study.studyId));
 
-        axios.get(`/api/matches/target-score/${userId}`, config)
-            .then(res => setTargetStudies(res.data))
-            .catch(err => console.error("target error:", err));
+                setWeakStudies(weakRes.data.filter(filterFn));
+                setTargetStudies(targetRes.data.filter(filterFn));
 
+            } catch (err) {
+                console.error("추천 스터디 조회 실패:", err);
+            }
+        };
+
+        fetchData();
     }, []);
 
     return (
@@ -95,14 +102,20 @@ export default function TestResultPage() {
                         <div className="inner">
                             <span className="tag">취약 파트</span>
                             <div className="study-grid">
-                                {weakStudies.map((study) => (
-                                    <StudyCard key={study.studyId} study={study}
-                                        onClick={()=> {
-                                            setSelectedStudy(study);
-                                            setIsModalOpen(true);
-                                        }}
-                                    />
-                                ))}
+                                {weakStudies.map((study) => {
+                                    if (!study || !study.studyName) return null;
+
+                                    return (
+                                        <StudyCard
+                                            key={study.studyId}
+                                            study={study}
+                                            onClick={() => {
+                                                setSelectedStudy(study);
+                                                setIsModalOpen(true);
+                                            }}
+                                        />
+                                    );
+                                })}
                             </div>
                         </div>
                     </div>
@@ -110,14 +123,20 @@ export default function TestResultPage() {
                     <div className="study-category">
                         <span className="tag">목표 점수</span>
                         <div className="study-grid">
-                            {targetStudies.map((study) => (
-                                <StudyCard key={study.studyId} study={study}
-                                           onClick={()=> {
-                                               setSelectedStudy(study);
-                                               setIsModalOpen(true);
-                                           }}
-                                />
-                            ))}
+                            {targetStudies.map((study) => {
+                                if (!study || !study.studyName) return null;
+
+                                return (
+                                    <StudyCard
+                                        key={study.studyId}
+                                        study={study}
+                                        onClick={() => {
+                                            setSelectedStudy(study);
+                                            setIsModalOpen(true);
+                                        }}
+                                    />
+                                );
+                            })}
                         </div>
                     </div>
                 </div>
@@ -125,7 +144,12 @@ export default function TestResultPage() {
                 {/* 하단 버튼 */}
                 <div className="bottom-area">
                     <p>원하는 스터디를 찾지 못했나요?</p>
-                    <button className="create-btn">스터디 생성하기</button>
+                    <button
+                        className="create-btn"
+                        onClick={()=> navigate("/make-my-study")}
+                    >
+                        스터디 생성하기
+                    </button>
                 </div>
             </div>
             {isModalOpen && (
@@ -140,6 +164,9 @@ export default function TestResultPage() {
 
 
 function StudyCard({ study, onClick }) {
+    const pendingStudies = JSON.parse(localStorage.getItem("pendingStudies") || "[]");
+    const isPending = pendingStudies.includes(study.studyId);
+
     return (
         <div className="study-card" onClick={onClick}>
             <div className="card-content">
@@ -152,7 +179,8 @@ function StudyCard({ study, onClick }) {
                 <button className="apply-btn"
                         onClick={(e) => {
                             e.stopPropagation(); // 카드 클릭 막기
-                            // 신청 로직
+                            onClick();
+
                         }}
                 >
                     신청

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../apis/axiosInstance.jsx";
 import "../css/Study_manage_modal.css";
 
 export default function StudyManageModal({ study, onClose, onUpdateApplications }) {
@@ -7,54 +7,48 @@ export default function StudyManageModal({ study, onClose, onUpdateApplications 
     const [applications, setApplications] = useState([]);
 
     useEffect(() => {
-        const token = localStorage.getItem("accessToken");
 
-        // 1. 멤버 조회
+        // 멤버 조회
         const fetchMembers = async () => {
-            const res = await axios.get(`/api/studies/${study.studyId}/members`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            setMembers(res.data.data);
+            try {
+                const res = await api.get(`/studies/${study.studyId}/members`);
+                setMembers(res.data.data);
+            } catch (err) {
+                console.error("멤버 조회 실패", err);
+            }
         };
 
-        // 2. 신청자 조회 (팀장만 가능)
+        // 신청자 조회 (팀장만 가능)
         const fetchApplications = async () => {
             try {
-                const res = await axios.get(`/api/studies/${study.studyId}/applications`, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
+                const res = await api.get(`/studies/${study.studyId}/applications`);
                 setApplications(res.data.data);
             } catch (err) {
                 console.log("신청자 없음 or 권한 없음");
             }
         };
-
         fetchMembers();
         if (study.role === "LEADER") {
             fetchApplications();
         }
-    }, [study.studyId]);
+    }, [study]);
 
     // 승인
     const handleApprove = async (studyMemberId) => {
         try {
-            const token = localStorage.getItem("accessToken");
-
-            await axios.patch(
-                `/api/studies/${study.studyId}/applications/${studyMemberId}/approve`,
-                null,
-                { headers: { Authorization: `Bearer ${token}` } }
+            await api.patch(
+                `/studies/${study.studyId}/applications/${studyMemberId}/approve`
             );
 
             alert("승인 완료");
-            // 모달 내 상태 업데이트
+
             setApplications(prev => {
                 const updated = prev.filter(a => a.studyMemberId !== studyMemberId);
 
                 // 부모 상태는 렌더링 후에 실행
                 setTimeout(() => {
                     const hasPending = updated.some(a => a.status === "PENDING");
-                    onUpdateApplications(study.studyId, hasPending);
+                    onUpdateApplications(study, hasPending);
                 }, 0);
 
                 return updated;
@@ -68,17 +62,14 @@ export default function StudyManageModal({ study, onClose, onUpdateApplications 
 
     // 거절
     const handleReject = async (studyMemberId) => {
-        const token = localStorage.getItem("accessToken");
-
-        await axios.patch(
-            `/api/studies/${study.studyId}/applications/${studyMemberId}/reject`,
-            null,
-            { headers: { Authorization: `Bearer ${token}` } }
-        );
+        await api.patch(
+            `/studies/${study.studyId}/applications/${studyMemberId}/reject`);
 
         alert("거절 완료");
+
         setApplications(prev => {
             const updated = prev.filter(a => a.studyMemberId !== studyMemberId);
+
             setTimeout(() => {
                 const hasPending = updated.some(a => a.status === "PENDING");
                 onUpdateApplications(study.studyId, hasPending);

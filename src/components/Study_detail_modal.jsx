@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import "../css/Study_detail_modal.css"
-import axios from "axios";
+import api from "../apis/axiosInstance.jsx";
 
 function Study_detail_modal({ study, onClose }) {
     if (!study) return null;
+
     const [members, setMembers] = useState([]);
     const leader = members.find(m => m.role === "LEADER");
 
@@ -12,43 +13,35 @@ function Study_detail_modal({ study, onClose }) {
 
         const fetchMembers = async () => {
             try {
-                const token = localStorage.getItem("accessToken");
-                const res = await axios.get(`/api/studies/${study.studyId}/members`, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
+                const res = await api.get(`/studies/${study.studyId}/members`);
                 setMembers(res.data.data);
-                console.log(res.data.data)
+
             } catch (error) {
                 console.error("멤버 조회 실패", error);
             }
-
         };
-
         fetchMembers();
-    }, [study.studyId]);
+    }, [study]);
 
     const handleApply = async () => {
         try {
-            const token = localStorage.getItem("accessToken");
+            // 신청
+            await api.post(`/studies/${study.studyId}/apply`);
 
-            await axios.post(
-                `/api/studies/${study.studyId}/apply`,
-                null, // Body 없음
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
-            // 신청 완료 후 멤버 재조회
-            const res = await axios.get(`/api/studies/${study.studyId}/members`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            setMembers(res.data.data)
-            console.log("토큰:", token);
+            // 신청 후 멤버 재조회
+            const res = await api.get(`/studies/${study.studyId}/members`);
+            setMembers(res.data.data);
 
             alert("신청 완료!");
             onClose();
 
         } catch (error) {
             console.error(error);
-            alert("신청 실패");
+            if (error.response?.status === 400) {
+                alert("이미 신청한 스터디입니다. 승인 대기 중입니다.");
+            } else {
+                alert("신청 실패");
+            }
         }
     };
 

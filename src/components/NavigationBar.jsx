@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import {Link, useNavigate} from "react-router-dom";
-import axios from "axios";
+import api from "../apis/axiosInstance.jsx";
 import "../css/NavigationBar.css";
 
 export default function NavigationBar(){
@@ -24,25 +24,17 @@ export default function NavigationBar(){
         try {
             const accessToken = localStorage.getItem("accessToken");
 
-            const response = await axios.post(
-                "http://localhost:8080/api/auth/logout",
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                    withCredentials: true,
-                }
-            );
+            const res = await api.post("/auth/logout");
 
-            if (response.data.success) {
+            if (res.data.success) {
                 localStorage.removeItem("accessToken");
+                localStorage.removeItem("userId");
+
                 window.dispatchEvent(new Event("storage"));
 
                 setIsLoggedIn(false); // 상태 업데이트
-                alert(response.data.message);
+                alert(res.data.message);
                 navigate("/");
-                console.log("로그아웃 토큰:", accessToken);
             }
         } catch (error) {
             console.error("로그아웃 실패:", error);

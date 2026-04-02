@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import InputForm from "../components/InputForm.jsx";
 import Header from "../components/Header.jsx";
 import "../css/LoginPage.css";
+import api from "../apis/axiosInstance.jsx";
 
 export default function LoginPage() {
     const navigate = useNavigate();
@@ -23,25 +24,15 @@ export default function LoginPage() {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:8080/api/auth/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(form),
-                credentials: "include", // 쿠키 받으려면 필수
-            });
+            const res = await api.post("/auth/login", form);
 
-            if (!response.ok) {
-                throw new Error("로그인 실패");
-            }
-
-            const data = await response.json();
+            const data = res.data;
             console.log("로그인 성공:", data);
 
             // 예: accessToken localStorage에 저장
             localStorage.setItem("accessToken", data.data.accessToken);
             localStorage.setItem("userId", data.data.userId);
+
             window.dispatchEvent(new Event("storage"));
 
             // 로그인 후 페이지 이동
